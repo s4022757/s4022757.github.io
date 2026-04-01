@@ -24,6 +24,12 @@ body {
   min-height: 100vh;
 }
 
+article {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
 /* Media responsive */
 img,
 picture,
