@@ -28,7 +28,7 @@ container.addEventListener('click', function(){
         audioSource.connect(analyser);
         analyser.connect(audioContext.destination)
 
-        analyser.fftSize = 64;
+        analyser.fftSize = 512;
         initialized = true;
         animate();
     }
@@ -39,23 +39,48 @@ audio1.play();
 function animate(){
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength)
-    const barWidth = canvas.width/bufferLength;
+    const barWidth = 5;
+    //const barWidth = canvas.width/bufferLength;
 
     function draw(){
         let x = 0;
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         analyser.getByteFrequencyData(dataArray);
-
-        for (let i = 0; i < bufferLength; i++){
-            let barHeight = dataArray[i];
-            ctx.fillStyle = 'white';
-            ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight)
-            x += barWidth;
-        }   
-        requestAnimationFrame(animate);
+        drawVisualiser(bufferLength, x, barWidth, dataArray)
+        requestAnimationFrame(draw);
     }
     draw();
 }
+
+
+function drawVisualiser(bufferLength, x, barWidth, dataArray){
+    for (let i = 0; i < bufferLength; i++){
+    let barHeight = dataArray[i] * 1.5;
+    ctx.save();
+    ctx.translate(canvas.width/2, canvas.height/2);
+    ctx.rotate(i + Math.PI * 20 / bufferLength)
+    // HSL color
+    let hue = i * 5;
+    ctx.fillStyle = 'hsl(' + hue + ',100%, 50%)'; 
+
+    /* HSL with white
+    let hue = i * 0.5;
+    ctx.fillStyle = 'hsl(' + hue + ',100%,' + barHeight/5 + '%)';
+    */
+    
+    /* RGB color
+    const red = i * barHeight/20;
+    const green = i * 4;
+    const blue = barHeight/2;
+    ctx.fillStyle = 'rgb(' + red + ',' + green + ',' + blue +')'; */
+    //circular
+    ctx.fillRect(0, 0, barWidth, barHeight)
+    // horizontal bars ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight)
+    x += barWidth;
+    ctx.restore();
+    }  
+}
+
     //animate();
 
 
