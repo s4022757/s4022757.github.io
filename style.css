@@ -160,7 +160,9 @@ h1 {
   height: 76px;
   z-index: 10;
   pointer-events: auto;
-  transition: transform var(--transition-fast), border-color var(--transition-fast);
+  transition:
+    transform var(--transition-fast),
+    border-color var(--transition-fast);
 }
 
 #track-card:hover {
@@ -317,7 +319,8 @@ h1 {
   align-items: center;
   cursor: pointer;
   outline: none;
-  transition: transform var(--transition-fast),
+  transition:
+    transform var(--transition-fast),
     background-color var(--transition-fast),
     border-color var(--transition-fast);
   text-decoration: none;
@@ -573,7 +576,8 @@ h1 {
   border: 2px solid rgb(175, 25, 0);
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color var(--transition-fast),
+  transition:
+    background-color var(--transition-fast),
     border-color var(--transition-fast),
     transform var(--transition-fast);
 }

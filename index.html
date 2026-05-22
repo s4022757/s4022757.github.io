@@ -1,174 +1,264 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Descriptive Title for SEO and Browser tab -->
+    <title>DJ Mix & Audio Visualizer Media Player</title>
+    <!-- Google Fonts import for modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Audiowide&family=Bitcount+Single:wght@100..900&family=Goldman:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Descriptive Title for SEO and Browser tab -->
-  <title>DJ Mix & Audio Visualizer Media Player</title>
-  <!-- Google Fonts import for modern typography -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Audiowide&family=Bitcount+Single:wght@100..900&family=Goldman:wght@400;700&display=swap"
-    rel="stylesheet">
+    <!-- Base reset and customized stylesheet links -->
+    <link rel="stylesheet" href="reset.css" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Player and Visualizer Logic script. Defer ensures execution after DOM parsing -->
+    <script src="script.js" defer></script>
+  </head>
 
-  <!-- Base reset and customized stylesheet links -->
-  <link rel="stylesheet" href="reset.css" />
-  <link rel="stylesheet" href="style.css" />
-  <!-- Player and Visualizer Logic script. Defer ensures execution after DOM parsing -->
-  <script src="script.js" defer></script>
-</head>
-
-<body>
-  <!-- Header with application branding -->
-  <header class="player-header">
-    <div class="logo">
-      <span class="logo-glow"></span>
-      <h1>DJ CC Mix</h1>
-      <!-- DJ Curtis Cox? DJ Creative Commons! -->
-    </div>
-    <!-- External social and repository links styled to inherit deck button properties -->
-    <div class="header-links">
-      <a href="https://github.com/s4022757/s4022757.github.io" target="_blank" rel="noopener noreferrer"
-        class="control-btn header-btn" title="GitHub Repository">
-        <img src="assets/iconsWhite/GitHub.png" alt="GitHub repo" class="control-icon" />
-      </a>
-      <a href="https://archive.org/details/@ccurmit/lists/1/interactive-media---a2" target="_blank"
-        rel="noopener noreferrer" class="control-btn header-btn" title="Internet Archive assets">
-        <img src="assets/iconsWhite/InternetArchive.png" alt="Internet Archive assets" class="control-icon" />
-      </a>
-    </div>
-  </header>
-
-  <!-- Main player viewport card. Keeps the traditional double border concept elevated -->
-  <main class="player-deck double-border">
-
-    <!-- Visualizer Viewport: holds the responsive canvas and floating info card -->
-    <div class="main-screen" id="visualizer-viewport">
-      <!-- Canvas where audio frequencies are animated in real-time -->
-      <canvas id="visualizer-canvas"></canvas>
-
-      <!-- Floating Glassmorphic Metadata Card overlayed cleanly on top of visualizer -->
-      <div id="track-card" class="glass-panel">
-        <!-- Album cover which rotates like a vinyl record during playback -->
-        <div class="album-art-wrapper">
-          <img id="track-cover"
-            src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=150&auto=format&fit=crop&q=80"
-            alt="Album Art" />
-          <span class="vinyl-center"></span>
-        </div>
-        <!-- Track Titles (Title and Artist Name) -->
-        <div class="track-details">
-          <h2 id="track-title" class="marquee">Neon Horizon</h2>
-          <p id="track-artist">DJ Stardust</p>
-        </div>
-        <!-- Equalizer Live Indicator - animates when playing -->
-        <div class="live-indicator-eq" id="live-eq">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
+  <body>
+    <!-- Header with application branding -->
+    <header class="player-header">
+      <div class="logo">
+        <span class="logo-glow"></span>
+        <h1>DJ CC Mix</h1>
+        <!-- DJ Curtis Cox? DJ Creative Commons! -->
       </div>
-    </div>
-
-    <!-- Hidden native HTML5 Audio Element for playing DJ tracks and driving Web Audio analyser -->
-    <audio id="my-audio"></audio>
-
-    <!-- Centralised Control Bar for Playback, Volume, and Seeker -->
-    <div class="controls-panel">
-
-      <!-- Main Playback Navigation Row -->
-      <div class="controls-row primary-controls">
-        <!-- Previous Track Button -->
-        <button id="prev-button" class="control-btn" title="Previous Track">
-          <img src="assets/iconsWhite/SkipStart.png" alt="Previous" class="control-icon" />
-        </button>
-
-        <!-- Skip Backward 10s Button -->
-        <button id="skip-back-button" class="control-btn" title="Rewind 10s">
-          <img src="assets/iconsWhite/Replay10s.png" alt="Rewind 10s" class="control-icon" />
-        </button>
-
-        <!-- Main Play / Pause Trigger -->
-        <button id="play-pause-button" class="control-btn play-main" title="Play / Pause">
-          <img id="play-img" src="assets/iconsWhite/Play.png" alt="Play" class="control-icon" />
-          <img id="pause-img" src="assets/iconsWhite/Pause.png" alt="Pause" class="control-icon hidden" />
-        </button>
-
-        <!-- Skip Forward 10s Button -->
-        <button id="skip-forward-button" class="control-btn" title="Forward 10s">
-          <img src="assets/iconsWhite/Forward10s.png" alt="Forward 10s" class="control-icon" />
-        </button>
-
-        <!-- Next Track Button -->
-        <button id="next-button" class="control-btn" title="Next Track">
-          <img src="assets/iconsWhite/SkipEnd.png" alt="Next" class="control-icon" />
-        </button>
+      <!-- External social and repository links styled to inherit deck button properties -->
+      <div class="header-links">
+        <a
+          href="https://github.com/s4022757/s4022757.github.io"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="control-btn header-btn"
+          title="GitHub Repository"
+        >
+          <img
+            src="assets/iconsWhite/GitHub.png"
+            alt="GitHub repo"
+            class="control-icon"
+          />
+        </a>
+        <a
+          href="https://archive.org/details/@ccurmit/lists/1/interactive-media---a2"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="control-btn header-btn"
+          title="Internet Archive assets"
+        >
+          <img
+            src="assets/iconsWhite/InternetArchive.png"
+            alt="Internet Archive assets"
+            class="control-icon"
+          />
+        </a>
       </div>
+    </header>
 
-      <!-- Interactive Progress Scrub Bar with Time Markers -->
-      <div class="progress-bar-area">
-        <span id="current-time" class="time-label">00:00</span>
-        <div id="progress-bar-container" class="scrub-container">
-          <div id="progress-bar" class="scrub-progress">
-            <span class="scrub-handle"></span>
+    <!-- Main player viewport card. Keeps the traditional double border concept elevated -->
+    <main class="player-deck double-border">
+      <!-- Visualizer Viewport: holds the responsive canvas and floating info card -->
+      <div class="main-screen" id="visualizer-viewport">
+        <!-- Canvas where audio frequencies are animated in real-time -->
+        <canvas id="visualizer-canvas"></canvas>
+
+        <!-- Floating Glassmorphic Metadata Card overlayed cleanly on top of visualizer -->
+        <div id="track-card" class="glass-panel">
+          <!-- Album cover which rotates like a vinyl record during playback -->
+          <div class="album-art-wrapper">
+            <img
+              id="track-cover"
+              src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=150&auto=format&fit=crop&q=80"
+              alt="Album Art"
+            />
+            <span class="vinyl-center"></span>
+          </div>
+          <!-- Track Titles (Title and Artist Name) -->
+          <div class="track-details">
+            <h2 id="track-title" class="marquee">Neon Horizon</h2>
+            <p id="track-artist">DJ Stardust</p>
+          </div>
+          <!-- Equalizer Live Indicator - animates when playing -->
+          <div class="live-indicator-eq" id="live-eq">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
         </div>
-        <span id="duration-time" class="time-label">00:00</span>
       </div>
 
-      <!-- Secondary Functions Row: Mute and Volume Expansion -->
-      <div class="controls-row secondary-controls">
-        <!-- Audio Volume Controller (Hover-to-expand) -->
-        <div class="volume-container">
-          <button id="mute-unmute-button" class="control-btn small-btn" title="Toggle Mute">
-            <img id="volume-high-img" src="assets/iconsWhite/FullVolume.png" alt="Volume" class="control-icon" />
-            <img id="volume-muted-img" src="assets/iconsWhite/LowNoVolume.png" alt="Muted"
-              class="control-icon hidden" />
+      <!-- Hidden native HTML5 Audio Element for playing DJ tracks and driving Web Audio analyser -->
+      <audio id="my-audio"></audio>
+
+      <!-- Centralised Control Bar for Playback, Volume, and Seeker -->
+      <div class="controls-panel">
+        <!-- Main Playback Navigation Row -->
+        <div class="controls-row primary-controls">
+          <!-- Previous Track Button -->
+          <button id="prev-button" class="control-btn" title="Previous Track">
+            <img
+              src="assets/iconsWhite/SkipStart.png"
+              alt="Previous"
+              class="control-icon"
+            />
           </button>
-          <div class="volume-slider-wrapper">
-            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.8" class="volume-bar" />
+
+          <!-- Skip Backward 10s Button -->
+          <button id="skip-back-button" class="control-btn" title="Rewind 10s">
+            <img
+              src="assets/iconsWhite/Replay10s.png"
+              alt="Rewind 10s"
+              class="control-icon"
+            />
+          </button>
+
+          <!-- Main Play / Pause Trigger -->
+          <button
+            id="play-pause-button"
+            class="control-btn play-main"
+            title="Play / Pause"
+          >
+            <img
+              id="play-img"
+              src="assets/iconsWhite/Play.png"
+              alt="Play"
+              class="control-icon"
+            />
+            <img
+              id="pause-img"
+              src="assets/iconsWhite/Pause.png"
+              alt="Pause"
+              class="control-icon hidden"
+            />
+          </button>
+
+          <!-- Skip Forward 10s Button -->
+          <button
+            id="skip-forward-button"
+            class="control-btn"
+            title="Forward 10s"
+          >
+            <img
+              src="assets/iconsWhite/Forward10s.png"
+              alt="Forward 10s"
+              class="control-icon"
+            />
+          </button>
+
+          <!-- Next Track Button -->
+          <button id="next-button" class="control-btn" title="Next Track">
+            <img
+              src="assets/iconsWhite/SkipEnd.png"
+              alt="Next"
+              class="control-icon"
+            />
+          </button>
+        </div>
+
+        <!-- Interactive Progress Scrub Bar with Time Markers -->
+        <div class="progress-bar-area">
+          <span id="current-time" class="time-label">00:00</span>
+          <div id="progress-bar-container" class="scrub-container">
+            <div id="progress-bar" class="scrub-progress">
+              <span class="scrub-handle"></span>
+            </div>
+          </div>
+          <span id="duration-time" class="time-label">00:00</span>
+        </div>
+
+        <!-- Secondary Functions Row: Mute and Volume Expansion -->
+        <div class="controls-row secondary-controls">
+          <!-- Audio Volume Controller (Hover-to-expand) -->
+          <div class="volume-container">
+            <button
+              id="mute-unmute-button"
+              class="control-btn small-btn"
+              title="Toggle Mute"
+            >
+              <img
+                id="volume-high-img"
+                src="assets/iconsWhite/FullVolume.png"
+                alt="Volume"
+                class="control-icon"
+              />
+              <img
+                id="volume-muted-img"
+                src="assets/iconsWhite/LowNoVolume.png"
+                alt="Muted"
+                class="control-icon hidden"
+              />
+            </button>
+            <div class="volume-slider-wrapper">
+              <input
+                type="range"
+                id="volume-slider"
+                min="0"
+                max="1"
+                step="0.01"
+                value="0.8"
+                class="volume-bar"
+              />
+            </div>
+          </div>
+
+          <!-- Shuffle and Fullscreen Controls -->
+          <div class="right-secondary-controls">
+            <button
+              id="shuffle-button"
+              class="control-btn small-btn"
+              title="Toggle Shuffle"
+            >
+              <img
+                src="assets/iconsWhite/Shuffle.png"
+                alt="Shuffle"
+                class="control-icon"
+              />
+            </button>
+            <button
+              id="fullscreen-button"
+              class="control-btn small-btn"
+              title="Toggle Fullscreen"
+            >
+              <img
+                src="https://img.icons8.com/ios-glyphs/30/FFFFFF/full-screen--v1.png"
+                alt="Fullscreen"
+                class="control-icon"
+              />
+            </button>
           </div>
         </div>
+      </div>
+    </main>
 
-        <!-- Shuffle and Fullscreen Controls -->
-        <div class="right-secondary-controls">
-          <button id="shuffle-button" class="control-btn small-btn" title="Toggle Shuffle">
-            <img src="assets/iconsWhite/Shuffle.png" alt="Shuffle" class="control-icon" />
-          </button>
-          <button id="fullscreen-button" class="control-btn small-btn" title="Toggle Fullscreen">
-            <img src="https://img.icons8.com/ios-glyphs/30/FFFFFF/full-screen--v1.png" alt="Fullscreen"
-              class="control-icon" />
-          </button>
+    <!-- Playlist Navigation Block (Beneath the Player Deck) -->
+    <section class="playlist-section">
+      <div id="playlist-container" class="playlist-card double-border">
+        <header class="playlist-header">
+          <h3>Tracklist</h3>
+          <span id="playlist-count" class="track-count-badge">4 Tracks</span>
+        </header>
+        <!-- Interactive tracks injection wrapper -->
+        <div id="playlist-tracks" class="tracks-list">
+          <!-- Injected dynamically via script.js -->
         </div>
       </div>
+    </section>
 
-    </div>
-  </main>
-
-  <!-- Playlist Navigation Block (Beneath the Player Deck) -->
-  <section class="playlist-section">
-    <div id="playlist-container" class="playlist-card double-border">
-      <header class="playlist-header">
-        <h3>Tracklist</h3>
-        <span id="playlist-count" class="track-count-badge">4 Tracks</span>
-      </header>
-      <!-- Interactive tracks injection wrapper -->
-      <div id="playlist-tracks" class="tracks-list">
-        <!-- Injected dynamically via script.js -->
-      </div>
-    </div>
-  </section>
-
-  <!-- Page Footer citing source credits -->
-  <footer class="player-footer">
-    <p>DJ Mix Media Player for A2 Browser-based Interactive Experiments | Audio Sourced from Internet Archive</p>
-    <p> Thanks to Adhesion & Scrap Heap, Druhb, Genetic Trance, Noisesurfer, null set, and One Man's Hat for the dope
-      tunes!</p>
-  </footer>
-
-</body>
-
+    <!-- Page Footer citing source credits -->
+    <footer class="player-footer">
+      <p>
+        DJ Mix Media Player for A2 Browser-based Interactive Experiments | Audio
+        Sourced from Internet Archive
+      </p>
+      <p>
+        Thanks to Adhesion & Scrap Heap, Druhb, Genetic Trance, Noisesurfer,
+        null set, and One Man's Hat for the dope tunes!
+      </p>
+    </footer>
+  </body>
 </html>

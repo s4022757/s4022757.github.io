@@ -2,7 +2,7 @@
 //  1. PLAYLIST & ASSET DEFINITIONS
 // ==============================================================================
 // A structured JSON collection of tracks representing DJ Mix tracks.
-// Fully populated with Public Domain or Creative Commons Universal licensed audio sourced from Internet Archive. 
+// Fully populated with Public Domain or Creative Commons Universal licensed audio sourced from Internet Archive.
 // MP3 and OGG files hosted inside the repo in assets folder. This guarantees cross origin blocks and stable playback.
 const tracks = [
   {
@@ -10,18 +10,20 @@ const tracks = [
     title: "Bathed in Rays of Light",
     artist: "Adhesion & Scrap Heap",
     album: "The Life You Left Behind",
-    cover: "assets/MusicByAlbum/Adhesion&ScrapHead-TheLifeYouLeftBehind/cover.jpg",
+    cover:
+      "assets/MusicByAlbum/Adhesion&ScrapHead-TheLifeYouLeftBehind/cover.jpg",
     src: "assets/MusicByAlbum/Adhesion&ScrapHead-TheLifeYouLeftBehind/07.BathedinRaysofLight.ogg",
-    duration: "02:24"
+    duration: "02:24",
   },
   {
     id: 2,
     title: "Piece of Mind",
     artist: "Adhesion & Scrap Heap",
     album: "The Life You Left Behind",
-    cover: "assets/MusicByAlbum/Adhesion&ScrapHead-TheLifeYouLeftBehind/cover.jpg",
+    cover:
+      "assets/MusicByAlbum/Adhesion&ScrapHead-TheLifeYouLeftBehind/cover.jpg",
     src: "assets/MusicByAlbum/Adhesion&ScrapHead-TheLifeYouLeftBehind/11.PieceofMind.ogg",
-    duration: "01:27"
+    duration: "01:27",
   },
   {
     id: 3,
@@ -30,7 +32,7 @@ const tracks = [
     album: "Doctor Mabuse",
     cover: "assets/MusicByAlbum/Druhb-DoctorMabuse/cover.jpg",
     src: "assets/MusicByAlbum/Druhb-DoctorMabuse/06_palpitferecence_64kb.mp3",
-    duration: "03:50"
+    duration: "03:50",
   },
   {
     id: 4,
@@ -39,7 +41,7 @@ const tracks = [
     album: "Doctor Mabuse",
     cover: "assets/MusicByAlbum/Druhb-DoctorMabuse/cover.jpg",
     src: "assets/MusicByAlbum/Druhb-DoctorMabuse/09_kilidid_64kb.mp3",
-    duration: "06:12"
+    duration: "06:12",
   },
   {
     id: 5,
@@ -48,7 +50,7 @@ const tracks = [
     album: "Doctor Mabuse",
     cover: "assets/MusicByAlbum/Druhb-DoctorMabuse/cover.jpg",
     src: "assets/MusicByAlbum/Druhb-DoctorMabuse/10_tension_64kb.mp3",
-    duration: "04:15"
+    duration: "04:15",
   },
   {
     id: 6,
@@ -57,7 +59,7 @@ const tracks = [
     album: "Remixes",
     cover: "assets/MusicByAlbum/GeneticTrance-Remixes/cover.jpg",
     src: "assets/MusicByAlbum/GeneticTrance-Remixes/02.AbracadabrainstRemix.ogg",
-    duration: "04:41"
+    duration: "04:41",
   },
   {
     id: 7,
@@ -66,7 +68,7 @@ const tracks = [
     album: "Remixes",
     cover: "assets/MusicByAlbum/GeneticTrance-Remixes/cover.jpg",
     src: "assets/MusicByAlbum/GeneticTrance-Remixes/07.AkashamwcMix.ogg",
-    duration: "04:34"
+    duration: "04:34",
   },
   {
     id: 8,
@@ -75,7 +77,7 @@ const tracks = [
     album: "Remixes",
     cover: "assets/MusicByAlbum/GeneticTrance-Remixes/cover.jpg",
     src: "assets/MusicByAlbum/GeneticTrance-Remixes/16.AeroportetudeflashroyalMix.ogg",
-    duration: "02:32"
+    duration: "02:32",
   },
   {
     id: 9,
@@ -84,7 +86,7 @@ const tracks = [
     album: "Remixes",
     cover: "assets/MusicByAlbum/GeneticTrance-Remixes/cover.jpg",
     src: "assets/MusicByAlbum/GeneticTrance-Remixes/21.Delphismhz_DowntempoNoobMix.ogg",
-    duration: "01:19"
+    duration: "01:19",
   },
   {
     id: 10,
@@ -93,7 +95,7 @@ const tracks = [
     album: "Remixes",
     cover: "assets/MusicByAlbum/GeneticTrance-Remixes/cover.jpg",
     src: "assets/MusicByAlbum/GeneticTrance-Remixes/24.IndigoklugeInDi.stantGo.reEdition.ogg",
-    duration: "04:02"
+    duration: "04:02",
   },
   {
     id: 11,
@@ -102,7 +104,7 @@ const tracks = [
     album: "Rain Tear Drops",
     cover: "assets/MusicByAlbum/Noisesurfer-RainTearDrops/cover.jpg",
     src: "assets/MusicByAlbum/Noisesurfer-RainTearDrops/03-Noisesurfer-RainteardropsPart2.ogg",
-    duration: "06:00"
+    duration: "06:00",
   },
   {
     id: 12,
@@ -111,7 +113,7 @@ const tracks = [
     album: "Rain Tear Drops",
     cover: "assets/MusicByAlbum/Noisesurfer-RainTearDrops/cover.jpg",
     src: "assets/MusicByAlbum/Noisesurfer-RainTearDrops/08-Noisesurfer-ChemicalPlanet.ogg",
-    duration: "06:43"
+    duration: "06:43",
   },
   {
     id: 13,
@@ -120,7 +122,7 @@ const tracks = [
     album: "millipede",
     cover: "assets/MusicByAlbum/NullSet-Millipede/cover.png",
     src: "assets/MusicByAlbum/NullSet-Millipede/01-train_wreck.ogg",
-    duration: "02:48"
+    duration: "02:48",
   },
   {
     id: 14,
@@ -129,7 +131,7 @@ const tracks = [
     album: "millipede",
     cover: "assets/MusicByAlbum/NullSet-Millipede/cover.png",
     src: "assets/MusicByAlbum/NullSet-Millipede/04-sprawling_metropolis.ogg",
-    duration: "03:06"
+    duration: "03:06",
   },
   {
     id: 15,
@@ -138,7 +140,7 @@ const tracks = [
     album: "millipede",
     cover: "assets/MusicByAlbum/NullSet-Millipede/cover.png",
     src: "assets/MusicByAlbum/NullSet-Millipede/05-wire_commander.ogg",
-    duration: "02:32"
+    duration: "02:32",
   },
   {
     id: 16,
@@ -147,7 +149,7 @@ const tracks = [
     album: "millipede",
     cover: "assets/MusicByAlbum/NullSet-Millipede/cover.png",
     src: "assets/MusicByAlbum/NullSet-Millipede/08-vector_algebra.ogg",
-    duration: "02:09"
+    duration: "02:09",
   },
   {
     id: 17,
@@ -156,7 +158,7 @@ const tracks = [
     album: "millipede",
     cover: "assets/MusicByAlbum/NullSet-Millipede/cover.png",
     src: "assets/MusicByAlbum/NullSet-Millipede/11-jaw_rectify.ogg",
-    duration: "03:35"
+    duration: "03:35",
   },
   {
     id: 18,
@@ -165,7 +167,7 @@ const tracks = [
     album: "Praise",
     cover: "assets/MusicByAlbum/OneMan'sHat-Praise/cover.jpg",
     src: "assets/MusicByAlbum/OneMan'sHat-Praise/02-the_chill_of_transparency_vbr.ogg",
-    duration: "04:42"
+    duration: "04:42",
   },
   {
     id: 19,
@@ -174,7 +176,7 @@ const tracks = [
     album: "Praise",
     cover: "assets/MusicByAlbum/OneMan'sHat-Praise/cover.jpg",
     src: "assets/MusicByAlbum/OneMan'sHat-Praise/05-praise_vbr.ogg",
-    duration: "05:01"
+    duration: "05:01",
   },
   {
     id: 20,
@@ -183,7 +185,7 @@ const tracks = [
     album: "Fixture",
     cover: "assets/MusicByAlbum/ScrapHeap-Fixture/cover.jpg",
     src: "assets/MusicByAlbum/ScrapHeap-Fixture/03-rapid_fire.ogg",
-    duration: "01:26"
+    duration: "01:26",
   },
   {
     id: 21,
@@ -192,7 +194,7 @@ const tracks = [
     album: "Fixture",
     cover: "assets/MusicByAlbum/ScrapHeap-Fixture/cover.jpg",
     src: "assets/MusicByAlbum/ScrapHeap-Fixture/09-antithesis.ogg",
-    duration: "01:17"
+    duration: "01:17",
   },
   {
     id: 22,
@@ -201,7 +203,7 @@ const tracks = [
     album: "Fixture",
     cover: "assets/MusicByAlbum/ScrapHeap-Fixture/cover.jpg",
     src: "assets/MusicByAlbum/ScrapHeap-Fixture/11-tilde.ogg",
-    duration: "01:22"
+    duration: "01:22",
   },
   {
     id: 23,
@@ -210,7 +212,7 @@ const tracks = [
     album: "Fixture",
     cover: "assets/MusicByAlbum/ScrapHeap-Fixture/cover.jpg",
     src: "assets/MusicByAlbum/ScrapHeap-Fixture/15-face_the_crunch.ogg",
-    duration: "01:25"
+    duration: "01:25",
   },
   {
     id: 24,
@@ -219,8 +221,8 @@ const tracks = [
     album: "Fixture",
     cover: "assets/MusicByAlbum/ScrapHeap-Fixture/cover.jpg",
     src: "assets/MusicByAlbum/ScrapHeap-Fixture/20-time_to_split.ogg",
-    duration: "02:08"
-  }
+    duration: "02:08",
+  },
 ];
 
 // Active index pointing to the playing track
@@ -324,7 +326,8 @@ function renderPlaylist() {
   });
 
   // Update playlist count badge
-  document.getElementById("playlist-count").textContent = `${tracks.length} Tracks`;
+  document.getElementById("playlist-count").textContent =
+    `${tracks.length} Tracks`;
 }
 
 // Highlights and manages play/pause class states inside the dynamic playlist view
@@ -343,6 +346,8 @@ function updatePlaylistUIStates() {
     }
   });
 }
+// Heavily inspired by tutorial by Franks Laboratory
+// found here: https://www.youtube.com/watch?v=VXWvfrmpapI & here: https://www.youtube.com/watch?v=f0dwg99EVfo
 
 // ==============================================================================
 //  4. WEB AUDIO API INITIALIZATION & CANVASES PIPELINES
@@ -386,6 +391,8 @@ window.addEventListener("resize", resizeCanvas);
 // Call immediately to establish correct startup dimensions
 resizeCanvas();
 
+// Heavily inspired by tutorial by Franks Laboratory
+// found here: https://www.youtube.com/watch?v=VXWvfrmpapI & here: https://www.youtube.com/watch?v=f0dwg99EVfo
 // ==============================================================================
 //  5. VISUALIZATION DRAWING ALGORITHMS
 // ==============================================================================
@@ -424,10 +431,10 @@ function drawLiquidBlob(bufferLength, dataArray) {
     // Anchor center pivot point
     ctx.translate(canvas.width / 2, canvas.height / 2);
     // Rotate center coordinates around spiral orbit
-    ctx.rotate(i + Math.PI * 20 / bufferLength);
+    ctx.rotate(i + (Math.PI * 20) / bufferLength);
 
     // Restrict strictly to deep red (rgb(175, 25, 0)) and bright yellow (rgb(255, 255, 0))
-    ctx.fillStyle = (i % 2 === 0) ? 'rgb(175, 25, 0)' : 'rgb(255, 255, 0)';
+    ctx.fillStyle = i % 2 === 0 ? "rgb(175, 25, 0)" : "rgb(255, 255, 0)";
 
     // Draw circular spiral bar
     ctx.fillRect(0, 0, barWidth, barHeight);
@@ -476,12 +483,13 @@ function playAudio() {
   // Ensure Audio Context is created and resumed (remediates browser security delays)
   if (!audioInitialized) {
     initAudioEngine();
-  } else if (audioCtx && audioCtx.state === 'suspended') {
+  } else if (audioCtx && audioCtx.state === "suspended") {
     audioCtx.resume();
   }
 
   // Start track playback
-  audio.play()
+  audio
+    .play()
     .then(() => {
       // Toggle play pause icons in control bar
       playImg.classList.add("hidden");
@@ -494,8 +502,11 @@ function playAudio() {
       // Update playlist active icons
       updatePlaylistUIStates();
     })
-    .catch(error => {
-      console.warn("Autoplay block: click play again to initiate stream.", error);
+    .catch((error) => {
+      console.warn(
+        "Autoplay block: click play again to initiate stream.",
+        error,
+      );
     });
 }
 
@@ -728,11 +739,12 @@ function toggleMute() {
 // Toggle fullscreen state on the main visualizer screen viewport
 function toggleFullscreen() {
   if (!document.fullscreenElement) {
-    viewport.requestFullscreen()
+    viewport
+      .requestFullscreen()
       .then(() => {
         setTimeout(resizeCanvas, 150);
       })
-      .catch(err => {
+      .catch((err) => {
         console.warn("Fullscreen permission blocked.", err);
       });
   } else {
@@ -785,11 +797,14 @@ function initEventBindings() {
     if (tracks[currentTrackIndex].src.startsWith("http")) {
       console.warn(
         "CORS or Network Block: The remote audio stream could not be loaded. " +
-        "This is common if the hosting server does not allow cross-origin requests from localhost, " +
-        "or if there are network issues. You can download these DJ mix files and run them locally!"
+          "This is common if the hosting server does not allow cross-origin requests from localhost, " +
+          "or if there are network issues. You can download these DJ mix files and run them locally!",
       );
     } else {
-      console.warn("Local Asset Block: Make sure the file exists at " + tracks[currentTrackIndex].src);
+      console.warn(
+        "Local Asset Block: Make sure the file exists at " +
+          tracks[currentTrackIndex].src,
+      );
     }
   });
 }
