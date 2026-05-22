@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <canvas id="example_canvas" />
+
+    <script>
+      document.body.style.margin = "0px";
+      document.body.style.overflow = "hidden";
+
+      const cnv = document.getElementById("example_canvas");
+   
+
+      function setSize () {
+   cnv.width = window.innerWidth;
+      cnv.height = window.innerHeight;
+      }
+
+      setSize ()
+
+      window.onresize = setSize
+
+      const ctx = cnv.getContext("2d");
+
+      let x_pos = 100;
+      const y_pos = cnv.height / 2 - 50;
+
+      const squarePositions = []
+
+    document.body.onpointerdown = e => {
+        squarePositions.push ({
+            x: e.offsetX,
+            y: e.offsetY
+        })
+    }
+
+      function drawFrame() {
+        ctx.fillStyle = "turquoise";
+        ctx.fillRect(0, 0, cnv.width, cnv.height);
+
+        ctx.fillStyle = "hotpink";
+        ctx.fillRect(x_pos, y_pos, 100, 100);
+
+        x_pos += 2;
+
+        if (x_pos > cnv.width) {
+          x_pos = -100;
+        }
+
+        squarePositions.forEach (pos => {
+            ctx.fillRect (pos.x, pos.y, 10, 10)
+        })
+
+        requestAnimationFrame(drawFrame);
+      }
+
+      drawFrame();
+    </script>
+  </body>
+</html>

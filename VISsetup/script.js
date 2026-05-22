@@ -16,7 +16,6 @@ let audioContext;
 let initialized = false;
 
 container.addEventListener('click', function(){
-    //let audio1 = new Audio('assets/sword.wav');
     if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
     }
@@ -59,20 +58,24 @@ function drawVisualiser(bufferLength, x, barWidth, dataArray){
     ctx.save();
     ctx.translate(canvas.width/2, canvas.height/2);
     ctx.rotate(i + Math.PI * 20 / bufferLength)
-    // HSL color
+    /* HSL color
     let hue = i * 5;
     ctx.fillStyle = 'hsl(' + hue + ',100%, 50%)'; 
-
-    /* HSL with white
-    let hue = i * 0.5;
-    ctx.fillStyle = 'hsl(' + hue + ',100%,' + barHeight/5 + '%)';
     */
+
+    // HSL with white
+    let hue = i * 0.5;
+    ctx.fillStyle = 'hsl(' + hue + ',100%,' + barHeight/2.5 + '%)';
+    
+    
     
     /* RGB color
     const red = i * barHeight/20;
     const green = i * 4;
     const blue = barHeight/2;
-    ctx.fillStyle = 'rgb(' + red + ',' + green + ',' + blue +')'; */
+    ctx.fillStyle = 'rgb(' + red + ',' + green + ',' + blue +')';
+    */
+
     //circular
     ctx.fillRect(0, 0, barWidth, barHeight)
     // horizontal bars ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight)
