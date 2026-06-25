@@ -13,11 +13,9 @@
   To capture this:
   1. The page uses a deep slate-black background (#08090b) which represents
      the lecture hall's shadows.
-  2. The slide cards feature a dark walnut-wood borders (.slide-wood-frame) 
-     and glass apertures (.slide-glass-aperture) with lens reflections.
-  3. Golden brass accents (#d4af37) represent the metallic dials, levers, 
+  2. Golden brass accents (#d4af37) represent the metallic dials, levers, 
      and fittings of Victorian optical equipment.
-  4. Subtle animation keyframes (e.g., .projector-ambient-light) simulate 
+  3. Subtle animation keyframes (e.g., .projector-ambient-light) simulate 
      the flickering glow of a limelight or oil-burning projector lamp.
   
   CHALLENGES IN IMPLEMENTATION:
@@ -32,7 +30,7 @@
   ========================================================================
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap");
 
 /* 
   References:
@@ -44,7 +42,7 @@
   /* Design Tokens - OKLCH Color Palette Mapping */
   --bg-primary: oklch(20.79% 0.0058 106.9);
   /* Deep Off-Black / Charcoal */
-  --bg-secondary: oklch(16.00% 0.0350 252.76);
+  --bg-secondary: oklch(16% 0.035 252.76);
   /* Darkened Deep Electric Blue / Shadow Velvet */
   --bg-tertiary: oklch(20.79% 0.0058 106.9);
   /* Charcoal base for panels */
@@ -57,23 +55,29 @@
   --accent-gold: oklch(75.17% 0.1504 91.09);
   /* Vibrant Brass / Flare Yellow */
   --accent-gold-glow: oklch(75.17% 0.1504 91.09 / 25%);
-  --accent-gold-muted: oklch(62.25% 0.0499 105.0);
+  --accent-gold-muted: oklch(62.25% 0.0499 105);
   /* Antique Gold / Olive-Ochre */
-  --accent-terracotta: oklch(34.90% 0.0881 13.4);
+  --accent-terracotta: oklch(34.9% 0.0881 13.4);
   /* Terracotta / Oxblood Red */
 
-  --text-white: oklch(84.40% 0.0122 145.5);
+  --text-white: oklch(84.4% 0.0122 145.5);
   /* Fog Grey / Tinted White */
-  --text-muted: oklch(49.92% 0.0200 107.1);
+  --text-muted: oklch(49.92% 0.02 107.1);
   /* Muted Slate / Sage Grey */
   --text-dark: oklch(38.97% 0.0293 85.7);
   /* Dark Umber */
   --border-color: rgba(255, 255, 255, 0.06);
-  --glare-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0) 50.1%);
+  --glare-gradient: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0) 50.1%
+  );
 
   /* Fonts */
-  --font-serif: 'Playfair Display', Georgia, serif;
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
   /* Pacing & Timings */
   --transition-smooth: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
@@ -120,7 +124,11 @@ body {
   width: 100vw;
   height: 100vh;
   pointer-events: none;
-  background: radial-gradient(circle 800px at 50% 30%, rgba(212, 175, 55, 0.03) 0%, rgba(0, 0, 0, 0) 80%);
+  background: radial-gradient(
+    circle 800px at 50% 30%,
+    rgba(212, 175, 55, 0.03) 0%,
+    rgba(0, 0, 0, 0) 80%
+  );
   z-index: 1;
   opacity: 0.8;
   animation: flickerLamp 8s infinite alternate;
@@ -132,7 +140,6 @@ body {
   - W3Schools CSS3 Animations: https://www.w3schools.com/css/css3_animations.asp
 */
 @keyframes flickerLamp {
-
   0%,
   100% {
     opacity: 0.7;
@@ -222,7 +229,8 @@ body {
   height: 100%;
   object-fit: contain;
   /* Apply a beautiful muted warm brass/gold filter that is closer to the "Wragge" text color */
-  filter: invert(0.65) sepia(0.6) saturate(1.2) brightness(0.9) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.6));
+  filter: invert(0.65) sepia(0.6) saturate(1.2) brightness(0.9)
+    drop-shadow(0 10px 25px rgba(0, 0, 0, 0.6));
 }
 
 .projector-light-cone-wrapper {
@@ -250,11 +258,13 @@ body {
   height: 100%;
   clip-path: polygon(0 42%, 100% 0, 100% 100%, 0 58%);
   /* Cone projecting rightwards */
-  background: linear-gradient(to right,
-      rgba(255, 213, 79, 0.45) 0%,
-      rgba(212, 175, 55, 0.2) 30%,
-      rgba(212, 175, 55, 0.04) 75%,
-      rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(
+    to right,
+    rgba(255, 213, 79, 0.45) 0%,
+    rgba(212, 175, 55, 0.2) 30%,
+    rgba(212, 175, 55, 0.04) 75%,
+    rgba(0, 0, 0, 0) 100%
+  );
   mix-blend-mode: screen;
   filter: blur(5px);
 }
@@ -327,7 +337,6 @@ body {
 }
 
 @keyframes bounceArrow {
-
   0%,
   20%,
   50%,
@@ -346,14 +355,13 @@ body {
 }
 
 @keyframes flickerBeam {
-
   0%,
   100% {
     opacity: 0.75;
   }
 
   12% {
-    opacity: 0.70;
+    opacity: 0.7;
   }
 
   20% {
@@ -369,11 +377,11 @@ body {
   }
 
   75% {
-    opacity: 0.90;
+    opacity: 0.9;
   }
 
   90% {
-    opacity: 0.70;
+    opacity: 0.7;
   }
 }
 
@@ -524,12 +532,17 @@ body {
    Act I: The Crucible of the Mountain Styles
    ======================================================================== */
 .act-mountain {
-  background: linear-gradient(to bottom, #08090b 0%, rgba(8, 9, 11, 0.9) 30%, rgba(8, 9, 11, 0.95) 100%), url('updatedWebsiteNarrative.webp') no-repeat center center;
+  background:
+    linear-gradient(
+      to bottom,
+      #08090b 0%,
+      rgba(8, 9, 11, 0.9) 30%,
+      rgba(8, 9, 11, 0.95) 100%
+    ),
+    url("updatedWebsiteNarrative.webp") no-repeat center center;
   background-size: cover;
   background-attachment: fixed; /* Parallax effect */
 }
-
-
 
 .scientific-chart-panel {
   background: linear-gradient(135deg, #1f1a14 0%, #12100d 100%);
@@ -537,14 +550,14 @@ body {
   border-radius: 6px;
   padding: 1.5rem;
   margin: 1.5rem 0;
-  box-shadow: 
+  box-shadow:
     0 10px 25px rgba(0, 0, 0, 0.6),
     inset 0 0 15px rgba(0, 0, 0, 0.8);
   position: relative;
 }
 
 .scientific-chart-panel::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 4px;
   left: 4px;
@@ -613,7 +626,6 @@ body {
   line-height: 1.2;
 }
 
-
 /* Section Header overlay */
 .gallery-header {
   padding: 2.5rem 4rem 1.5rem 4rem;
@@ -667,7 +679,9 @@ body {
   align-items: center;
   opacity: 0.3;
   transform: scale(0.9) rotate(-1deg);
-  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease-out;
+  transition:
+    transform 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+    opacity 0.5s ease-out;
 }
 
 .lantern-slide-card.active-slide {
@@ -698,7 +712,7 @@ body {
   border: 3px solid #1a0f0d;
   position: relative;
   overflow: hidden;
-  box-shadow: 
+  box-shadow:
     inset 0 0 20px rgba(0, 0, 0, 0.95),
     0 0 15px rgba(0, 0, 0, 0.5);
 }
@@ -742,7 +756,11 @@ body {
 
 /* Sticky Carriage Caption Board */
 .gallery-footer-board {
-  background: linear-gradient(to top, rgba(15, 17, 21, 0.95) 0%, rgba(8, 9, 11, 0.85) 100%);
+  background: linear-gradient(
+    to top,
+    rgba(15, 17, 21, 0.95) 0%,
+    rgba(8, 9, 11, 0.85) 100%
+  );
   backdrop-filter: blur(10px);
   border-top: 1px solid var(--border-color);
   padding: 2rem 4rem;
@@ -821,7 +839,14 @@ body {
    Act II: The Language of the Tempest Styles
    ======================================================================== */
 .act-tempest {
-  background: linear-gradient(to bottom, rgba(8, 9, 11, 0.95) 0%, rgba(16, 20, 24, 0.92) 50%, rgba(8, 9, 11, 0.95) 100%), url('imageAssets/weatherMap.webp') no-repeat center center;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(8, 9, 11, 0.95) 0%,
+      rgba(16, 20, 24, 0.92) 50%,
+      rgba(8, 9, 11, 0.95) 100%
+    ),
+    url("imageAssets/weatherMap.webp") no-repeat center center;
   background-size: cover;
   background-attachment: fixed;
 }
@@ -910,7 +935,11 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at center, rgba(16, 12, 10, 0.3) 0%, rgba(8, 9, 11, 0.8) 100%);
+  background: radial-gradient(
+    circle at center,
+    rgba(16, 12, 10, 0.3) 0%,
+    rgba(8, 9, 11, 0.8) 100%
+  );
   pointer-events: none;
   z-index: 1;
 }
@@ -923,7 +952,11 @@ body {
   position: relative;
   overflow: hidden; /* Hide scrollbars, scrolled via JS transform */
   border-right: 1px solid var(--border-color);
-  background: linear-gradient(to right, rgba(8, 9, 11, 0.98) 80%, rgba(16, 20, 24, 0.95) 100%);
+  background: linear-gradient(
+    to right,
+    rgba(8, 9, 11, 0.98) 80%,
+    rgba(16, 20, 24, 0.95) 100%
+  );
   z-index: 10;
   display: flex;
   flex-direction: column;
@@ -990,7 +1023,11 @@ body {
   justify-content: space-between;
   position: relative;
   z-index: 5;
-  background: radial-gradient(circle at center, rgba(16, 12, 10, 0.2) 0%, rgba(8, 9, 11, 0.6) 100%);
+  background: radial-gradient(
+    circle at center,
+    rgba(16, 12, 10, 0.2) 0%,
+    rgba(8, 9, 11, 0.6) 100%
+  );
 }
 
 .theosophical-harmony-panel {
@@ -999,7 +1036,7 @@ body {
   border-radius: 6px;
   padding: 1.5rem;
   margin-top: 1.5rem;
-  box-shadow: 
+  box-shadow:
     0 15px 35px rgba(0, 0, 0, 0.5),
     inset 0 0 15px rgba(0, 0, 0, 0.8);
 }
@@ -1043,7 +1080,9 @@ body {
   padding: 0.9rem 1rem;
   color: var(--text-muted);
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  transition: color 0.3s ease, background-color 0.3s ease;
+  transition:
+    color 0.3s ease,
+    background-color 0.3s ease;
 }
 
 .harmony-table td:last-child {
@@ -1070,7 +1109,15 @@ body {
    Act V: The Wild Paradise Styles
    ======================================================================== */
 .act-paradise {
-  background: linear-gradient(to bottom, rgba(8, 9, 11, 0.95) 0%, rgba(12, 18, 14, 0.92) 30%, rgba(12, 18, 14, 0.95) 70%, #08090b 100%), url('imageAssets/gardenScene.webp') no-repeat center center;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(8, 9, 11, 0.95) 0%,
+      rgba(12, 18, 14, 0.92) 30%,
+      rgba(12, 18, 14, 0.95) 70%,
+      #08090b 100%
+    ),
+    url("imageAssets/gardenScene.webp") no-repeat center center;
   background-size: cover;
   background-attachment: fixed;
   padding: 15vh 0 10vh 0;
@@ -1145,7 +1192,6 @@ body {
   position: relative;
 }
 
-
 /* ========================================================================
    Persistent Floating Magic Lantern Lens Widget
    ======================================================================== */
@@ -1211,18 +1257,37 @@ body {
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  background: radial-gradient(circle at center, #ffd54f 0%, #c79b3f 60%, rgba(0, 0, 0, 0) 100%);
+  background: radial-gradient(
+    circle at center,
+    #ffd54f 0%,
+    #c79b3f 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
   opacity: 0.8;
   box-shadow: 0 0 15px rgba(255, 213, 79, 0.6);
   animation: lensLampFlicker 4s infinite alternate;
 }
 
 @keyframes lensLampFlicker {
-  0%, 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(0.95); }
-  23% { opacity: 0.85; }
-  45% { opacity: 0.65; transform: translate(-50%, -50%) scale(0.9); }
-  70% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.05); }
-  88% { opacity: 0.75; }
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  23% {
+    opacity: 0.85;
+  }
+  45% {
+    opacity: 0.65;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  70% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+  88% {
+    opacity: 0.75;
+  }
 }
 
 /* ========================================================================
@@ -1232,7 +1297,9 @@ body {
   position: relative;
   padding: 15vh 0 10vh 0;
   width: 100vw;
-  background-color: var(--bg-primary); /* Default off-black background (same as Act IV) */
+  background-color: var(
+    --bg-primary
+  ); /* Default off-black background (same as Act IV) */
   border-top: 1px solid var(--border-color);
   z-index: 2;
 }
@@ -1283,7 +1350,9 @@ body {
 .archive-grid-item:hover {
   border-color: rgba(212, 175, 55, 0.3);
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(212, 175, 55, 0.05);
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.4),
+    0 0 15px rgba(212, 175, 55, 0.05);
 }
 
 .grid-item-thumbnail {
@@ -1317,7 +1386,13 @@ body {
 .attribution-line {
   border: 0;
   height: 1px;
-  background: linear-gradient(to right, transparent, var(--border-color) 20%, var(--border-color) 80%, transparent);
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--border-color) 20%,
+    var(--border-color) 80%,
+    transparent
+  );
   margin-bottom: 2rem;
 }
 
@@ -1423,7 +1498,7 @@ body {
   border: 3px solid #1a0f0d;
   position: relative;
   overflow: hidden;
-  box-shadow: 
+  box-shadow:
     inset 0 0 25px rgba(0, 0, 0, 0.95),
     0 0 20px rgba(0, 0, 0, 0.6);
 }

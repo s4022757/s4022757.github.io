@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- 
-    References:
-    - MDN HTML <head> Element: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/head
-    - W3Schools HTML Head: https://www.w3schools.com/html/html_head.asp
-    - MDN Metadata in HTML: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
-    - W3Schools HTML Meta Tag: https://www.w3schools.com/tags/tag_meta.asp
-  -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Inclement Wragge: A Magic Lantern Archive</title>
@@ -45,7 +38,7 @@
      
   CHALLENGES & FUTURE PROJECTIONS:
   - Scroll Synchronization: A main hurdle in vanilla scrollytelling is layout 
-    thrashing when calculating positioning. We solve this by limiting DOM writes 
+    thrashing when calculating positioning. Have tried solving this by limiting DOM writes 
     to CSS properties (transforms, opacities) interpolated via requestAnimationFrame.
   - Future Scale: Integrating this prototype into a larger educational archive 
     could benefit from progressive loading/lazy-loading of the slide assets 
@@ -76,7 +69,7 @@
       <!-- Title Header on the Left -->
       <div class="hero-title-wrapper" id="hero-text">
         <h1 class="hero-title-clean">THE WEATHER<br><span class="accent-title">PROPHET</span></h1>
-        <p class="hero-kicker-clean">The Sublime Universe of Clement Wragge</p>
+        <p class="hero-kicker-clean">The Sublime Universe of The Inclement Wragge</p>
       </div>
 
       <!-- Magic Lantern Graphic on the Right -->
@@ -142,7 +135,7 @@
         </div>
         <div class="act-visual-column">
           <div class="visual-card">
-            <img src="updatedWebsiteNarrative.webp" alt="Wragge on Ben Nevis Summit">
+            <img src="imageAssets/wraggeBenNevis.webp" alt="Wragge on Ben Nevis Summit">
             <span class="visual-caption">Wragge recording meteorological data amidst the rocky void of Ben Nevis summit.</span>
           </div>
           <div class="visual-card sub-card">
@@ -477,7 +470,7 @@
       <div class="attribution-block">
         <hr class="attribution-line">
         <p class="attribution-text">
-          Prototype design and code by Curtis Cox (s4022757) for A3 Interactive Media. Artworks and slide captures retrieved from <em>The Public Domain Review</em>, showcasing the collection "A Prophet of the Weather: Lantern Slides by Clement Lindley Wragge (ca. 1900-22)." All slide resources are licensed under the Public Domain or Creative Commons CC0. No third-party layout engines, frameworks, or dependencies were used.
+          Prototype design and code by Curtis Cox (s4022757) for A3 Interactive Media. Artworks and slide captures retrieved from <em>The Public Domain Review</em>, showcasing the collection "A Prophet of the Weather: Lantern Slides by Clement Lindley Wragge (ca. 1900-22)." All slide resources are licensed under the Public Domain or Creative Commons CC0. No third-party libraries were used.
         </p>
       </div>
     </div>
