@@ -1,0 +1,1454 @@
+/* 
+  ========================================================================
+  STYLE SHEET FOR "THE INCLEMENT WRAGGE" ARCHIVE
+  ========================================================================
+  Author: Curtis Cox - s4022757
+  Context: Interactive biographical archive of Clement Lindley Wragge (1852-1922)
+  Action: Scroll-driven interface
+  
+  THEMATIC DESIGN INTENT (STYLE & USABILITY REFLECTION):
+  The styling of this interface is a direct extension of the "Magic Lantern" 
+  medium. Magic Lantern shows were held in darkened rooms, with only the 
+  incandescent glow of a projection lamp illuminating the colored glass plates.
+  To capture this:
+  1. The page uses a deep slate-black background (#08090b) which represents
+     the lecture hall's shadows.
+  2. The slide cards feature a dark walnut-wood borders (.slide-wood-frame) 
+     and glass apertures (.slide-glass-aperture) with lens reflections.
+  3. Golden brass accents (#d4af37) represent the metallic dials, levers, 
+     and fittings of Victorian optical equipment.
+  4. Subtle animation keyframes (e.g., .projector-ambient-light) simulate 
+     the flickering glow of a limelight or oil-burning projector lamp.
+  
+  CHALLENGES IN IMPLEMENTATION:
+  - Sticky Layouts: Keeping elements locked to the viewport (.bio-sticky-container, 
+    .gallery-sticky-viewport) requires careful handling of height and overflow. 
+    Using 'position: sticky' ensures we avoid writing complex layout scroll offsets 
+    in JavaScript, allowing the browser to optimize layout passes.
+  - Horizontal Translation: Animating the slide track (.slide-track) uses CSS 
+    transforms ('transform: translateX()') instead of changing 'left' or 'margin'. 
+    Transforms are GPU-accelerated and do not trigger layout recalculations, 
+    preventing frame-rate drops on mobile devices and high-DPI displays.
+  ========================================================================
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+/* 
+  References:
+  - MDN CSS Custom Properties (Variables): https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties
+  - W3Schools CSS Variables: https://www.w3schools.com/css/css3_variables.asp
+  - MDN oklch() color function: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklch
+*/
+:root {
+  /* Design Tokens - OKLCH Color Palette Mapping */
+  --bg-primary: oklch(20.79% 0.0058 106.9);
+  /* Deep Off-Black / Charcoal */
+  --bg-secondary: oklch(16.00% 0.0350 252.76);
+  /* Darkened Deep Electric Blue / Shadow Velvet */
+  --bg-tertiary: oklch(20.79% 0.0058 106.9);
+  /* Charcoal base for panels */
+
+  --wood-frame: oklch(38.97% 0.0293 85.7);
+  /* Dark Umber / Olive-Brown */
+  --wood-border: oklch(25.59% 0.0716 252.76);
+  /* Deep Electric Blue shadow/mounts */
+
+  --accent-gold: oklch(75.17% 0.1504 91.09);
+  /* Vibrant Brass / Flare Yellow */
+  --accent-gold-glow: oklch(75.17% 0.1504 91.09 / 25%);
+  --accent-gold-muted: oklch(62.25% 0.0499 105.0);
+  /* Antique Gold / Olive-Ochre */
+  --accent-terracotta: oklch(34.90% 0.0881 13.4);
+  /* Terracotta / Oxblood Red */
+
+  --text-white: oklch(84.40% 0.0122 145.5);
+  /* Fog Grey / Tinted White */
+  --text-muted: oklch(49.92% 0.0200 107.1);
+  /* Muted Slate / Sage Grey */
+  --text-dark: oklch(38.97% 0.0293 85.7);
+  /* Dark Umber */
+  --border-color: rgba(255, 255, 255, 0.06);
+  --glare-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0) 50.1%);
+
+  /* Fonts */
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Pacing & Timings */
+  --transition-smooth: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  --transition-fast: all 0.2s ease-out;
+}
+
+/* ========================================================================
+   Base Styles & Scrollbar Design
+   ======================================================================== */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-white);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Custom Brass Scrollbar to evoke Victorian gauges and dials */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--wood-frame);
+  border: 2px solid var(--bg-primary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-gold);
+}
+
+/* ========================================================================
+   Ambient Projector & Light Beams
+   ======================================================================== */
+.projector-ambient-light {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  background: radial-gradient(circle 800px at 50% 30%, rgba(212, 175, 55, 0.03) 0%, rgba(0, 0, 0, 0) 80%);
+  z-index: 1;
+  opacity: 0.8;
+  animation: flickerLamp 8s infinite alternate;
+}
+
+/*
+  References:
+  - MDN @keyframes: https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes
+  - W3Schools CSS3 Animations: https://www.w3schools.com/css/css3_animations.asp
+*/
+@keyframes flickerLamp {
+
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  12% {
+    opacity: 0.65;
+  }
+
+  15% {
+    opacity: 0.85;
+  }
+
+  35% {
+    opacity: 0.75;
+  }
+
+  38% {
+    opacity: 0.6;
+  }
+
+  45% {
+    opacity: 0.8;
+  }
+
+  72% {
+    opacity: 0.73;
+  }
+
+  75% {
+    opacity: 0.9;
+  }
+}
+
+/* ========================================================================
+   Hero Section (Y: 0px - 1000px)
+   ======================================================================== */
+.hero-section {
+  position: relative;
+  height: 200vh;
+  /* Increased scrollable height for projection wipe-in */
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: center;
+  overflow: visible;
+  /* Required to allow sticky container to scroll past */
+  z-index: 2;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.hero-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  max-width: 1200px;
+  width: 100%;
+  height: 100vh;
+  padding: 0 4rem;
+  position: sticky;
+  /* Lock container in viewport during wipe-in scroll */
+  /* 
+    References:
+    - MDN position: sticky: https://developer.mozilla.org/en-US/docs/Web/CSS/position
+    - W3Schools CSS Positioning: https://www.w3schools.com/css/css_positioning.asp
+  */
+  top: 0;
+  z-index: 4;
+  will-change: opacity, transform;
+}
+
+.hero-lantern-wrapper {
+  position: relative;
+  width: 320px;
+  height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  will-change: transform, opacity;
+}
+
+.magic-lantern-graphic {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* Apply a beautiful muted warm brass/gold filter that is closer to the "Wragge" text color */
+  filter: invert(0.65) sepia(0.6) saturate(1.2) brightness(0.9) drop-shadow(0 10px 25px rgba(0, 0, 0, 0.6));
+}
+
+.projector-light-cone-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 280px;
+  /* Alignment with lens element on the right side of wrapper */
+  right: auto;
+  transform: translateY(-50%) scaleX(0);
+  /* Starts collapsed, animated by JS scroll handler */
+  width: 500px;
+  /* Constrain width so it fades before screen edge */
+  height: 50vh;
+  transform-origin: left center;
+  /* Scale from the lens (left side of cone) */
+  pointer-events: none;
+  z-index: -1;
+  will-change: opacity, transform;
+  opacity: 0;
+  /* Starts hidden, revealed by scroll progress */
+}
+
+.projector-light-cone {
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(0 42%, 100% 0, 100% 100%, 0 58%);
+  /* Cone projecting rightwards */
+  background: linear-gradient(to right,
+      rgba(255, 213, 79, 0.45) 0%,
+      rgba(212, 175, 55, 0.2) 30%,
+      rgba(212, 175, 55, 0.04) 75%,
+      rgba(0, 0, 0, 0) 100%);
+  mix-blend-mode: screen;
+  filter: blur(5px);
+}
+
+.projector-light-cone-wrapper.flickering .projector-light-cone {
+  animation: flickerBeam 8s infinite alternate;
+}
+
+.hero-title-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  z-index: 5;
+  will-change: transform, opacity;
+}
+
+.hero-title-clean {
+  font-family: var(--font-serif);
+  font-size: 5rem;
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: 0.05em;
+  color: var(--text-white);
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9);
+  margin-bottom: 1rem;
+}
+
+.accent-title {
+  color: var(--accent-gold);
+  text-shadow: 0 0 15px var(--accent-gold-glow);
+}
+
+.hero-kicker-clean {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+  border-left: 2px solid var(--accent-gold);
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0.7;
+  z-index: 10;
+}
+
+.scroll-arrow {
+  font-size: 1.5rem;
+  color: var(--accent-gold);
+  animation: bounceArrow 2s infinite;
+}
+
+.scroll-text {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+}
+
+@keyframes bounceArrow {
+
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-8px);
+  }
+
+  60% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes flickerBeam {
+
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+
+  12% {
+    opacity: 0.70;
+  }
+
+  20% {
+    opacity: 0.85;
+  }
+
+  35% {
+    opacity: 0.65;
+  }
+
+  55% {
+    opacity: 0.78;
+  }
+
+  75% {
+    opacity: 0.90;
+  }
+
+  90% {
+    opacity: 0.70;
+  }
+}
+
+/* ========================================================================
+   Narrative Acts Layout System & Environment Styling
+   ======================================================================== */
+.narrative-act {
+  position: relative;
+  padding: 15vh 0;
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border-color);
+  z-index: 2;
+}
+
+.act-container {
+  max-width: 1300px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 4rem;
+  position: relative;
+  z-index: 5;
+}
+
+.act-grid-split {
+  /*
+    References:
+    - MDN CSS Grid Layout: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout
+    - W3Schools CSS Grid: https://www.w3schools.com/css/css_grid.asp
+  */
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.act-grid-split.reversed {
+  grid-template-columns: 0.9fr 1.1fr;
+}
+
+.act-grid-split.reversed .act-text-column {
+  grid-column: 2;
+}
+
+.act-grid-split.reversed .act-visual-column {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.act-text-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  text-align: left;
+}
+
+.act-label {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--accent-gold);
+  display: inline-block;
+}
+
+.act-title {
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--text-white);
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.act-text-column p {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  line-height: 1.75;
+  margin: 0;
+}
+
+.act-text-column strong {
+  color: var(--text-white);
+  font-weight: 500;
+}
+
+.act-visual-column {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  align-items: center;
+}
+
+.visual-card {
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.25rem;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.5);
+  transition: var(--transition-smooth);
+  width: 100%;
+  max-width: 480px;
+}
+
+.visual-card img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  filter: sepia(0.2) contrast(1.05) brightness(0.95);
+  margin-bottom: 1rem;
+  transition: filter 0.5s ease;
+}
+
+.visual-card:hover img {
+  filter: sepia(0) contrast(1.05) brightness(1);
+}
+
+.visual-caption {
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--text-muted);
+  display: block;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.visual-card.sub-card {
+  max-width: 380px;
+  align-self: flex-end;
+  transform: translateY(-20px) rotate(1deg);
+  z-index: 6;
+}
+
+.act-grid-split.reversed .visual-card.sub-card {
+  align-self: flex-start;
+  transform: translateY(-20px) rotate(-1deg);
+}
+
+/* ========================================================================
+   Act I: The Crucible of the Mountain Styles
+   ======================================================================== */
+.act-mountain {
+  background: linear-gradient(to bottom, #08090b 0%, rgba(8, 9, 11, 0.9) 30%, rgba(8, 9, 11, 0.95) 100%), url('updatedWebsiteNarrative.webp') no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed; /* Parallax effect */
+}
+
+
+
+.scientific-chart-panel {
+  background: linear-gradient(135deg, #1f1a14 0%, #12100d 100%);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 6px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.6),
+    inset 0 0 15px rgba(0, 0, 0, 0.8);
+  position: relative;
+}
+
+.scientific-chart-panel::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 1px dashed rgba(212, 175, 55, 0.08);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.chart-header {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent-gold);
+  text-align: center;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+  padding-bottom: 0.5rem;
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.chart-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.chart-label {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: var(--text-white);
+  font-weight: 600;
+}
+
+.chart-sub {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-gold-muted);
+}
+
+.chart-desc {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-top: 0.25rem;
+}
+
+.chart-vector {
+  color: var(--accent-gold-muted);
+  font-size: 1.25rem;
+  letter-spacing: -0.1em;
+  opacity: 0.6;
+  line-height: 1.2;
+}
+
+
+/* Section Header overlay */
+.gallery-header {
+  padding: 2.5rem 4rem 1.5rem 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 3;
+}
+
+.gallery-label {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--accent-gold);
+}
+
+.carousel-navigation-hint {
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+/* Outer horizontal sliding track wrapper */
+.slide-track-wrapper {
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+/* Sliding track container, manipulated via JS translate */
+.slide-track {
+  display: flex;
+  gap: 15vw;
+  padding-left: 20vw; /* Center the first slide in the 60vw right column */
+  padding-right: 40vw;
+  height: 70vh;
+  align-items: center;
+  will-change: transform;
+}
+
+/* Physical Lantern Slide Card Layout */
+.lantern-slide-card {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0.3;
+  transform: scale(0.9) rotate(-1deg);
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease-out;
+}
+
+.lantern-slide-card.active-slide {
+  opacity: 1;
+  transform: scale(1.05) rotate(0deg);
+}
+
+/* Dark wood mount structure - REMOVED (now transparent spacer) */
+.slide-wood-frame {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  width: 380px; /* Outer boundary of the circular glass plate */
+  height: 380px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Aperture containing glass plate slide */
+.slide-glass-aperture {
+  width: 100%;
+  height: 100%;
+  border-radius: 6px; /* Subtle rounded corners instead of circular crop */
+  background-color: #000;
+  border: 3px solid #1a0f0d;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    inset 0 0 20px rgba(0, 0, 0, 0.95),
+    0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.slide-glass-aperture img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Restore full image presentation without cropping */
+  border-radius: 0;
+  border: none;
+  filter: sepia(0.15) contrast(1.05) brightness(0.92);
+}
+
+/* Lens glare effect */
+.glass-glare {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--glare-gradient);
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.65;
+  transition: opacity 0.3s ease;
+}
+
+.lantern-slide-card:hover .glass-glare {
+  opacity: 0.8;
+}
+
+.slide-label {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-top: 1.25rem;
+  opacity: 0.8;
+}
+
+/* Sticky Carriage Caption Board */
+.gallery-footer-board {
+  background: linear-gradient(to top, rgba(15, 17, 21, 0.95) 0%, rgba(8, 9, 11, 0.85) 100%);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--border-color);
+  padding: 2rem 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 3;
+}
+
+.active-slide-indicator {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  border: 1px solid var(--accent-gold);
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+}
+
+.caption-content {
+  flex-grow: 1;
+  margin: 0 4rem;
+  max-width: 800px;
+}
+
+.caption-title {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  color: var(--text-white);
+  margin-bottom: 0.35rem;
+}
+
+.caption-metadata {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.projector-controls {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.control-indicator {
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-muted);
+}
+
+.control-indicator.glow {
+  color: #34d399;
+  /* Green active glow */
+  background: rgba(52, 211, 153, 0.05);
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.1);
+  animation: breatheGreen 2s infinite alternate;
+}
+
+@keyframes breatheGreen {
+  0% {
+    box-shadow: 0 0 5px rgba(52, 211, 153, 0.05);
+  }
+
+  100% {
+    box-shadow: 0 0 12px rgba(52, 211, 153, 0.2);
+  }
+}
+
+/* ========================================================================
+   Outro & Archive Index Section (Y: 5500px+)
+   ======================================================================== */
+/* ========================================================================
+   Act II: The Language of the Tempest Styles
+   ======================================================================== */
+.act-tempest {
+  background: linear-gradient(to bottom, rgba(8, 9, 11, 0.95) 0%, rgba(16, 20, 24, 0.92) 50%, rgba(8, 9, 11, 0.95) 100%), url('imageAssets/weatherMap.webp') no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.floating-cyclone-vector {
+  position: absolute;
+  top: 25%;
+  left: 10%;
+  width: 280px;
+  height: 280px;
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 1;
+  filter: invert(0.8) sepia(0.5) saturate(2) hue-rotate(15deg);
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.theatrical-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.theatrical-list li {
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 3px solid var(--accent-gold-muted);
+  padding: 1rem 1.5rem;
+  border-radius: 0 6px 6px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.theatrical-list li strong {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.theatrical-list li strong.gold-text {
+  color: var(--accent-gold);
+}
+
+.theatrical-list li strong.terracotta-text {
+  color: var(--accent-terracotta);
+}
+
+.theatrical-list li span {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* ========================================================================
+   Act III: The Lantern Lectures & Split-Screen Sticky Layout
+   ======================================================================== */
+.act-lectures {
+  position: relative;
+  height: 300vh; /* Scroll track for both horizontal slides and vertical text */
+  width: 100vw;
+  padding: 0;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  display: block;
+  overflow: visible !important; /* CRITICAL: Remove overflow hidden constraints from the scroll track to allow sticky child to lock on screen! */
+}
+
+.lectures-sticky-container {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 40vw 60vw; /* Split screen layout */
+  overflow: hidden;
+}
+
+.lecture-hall-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(16, 12, 10, 0.3) 0%, rgba(8, 9, 11, 0.8) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Left Column: Vertical Text scrolling */
+.lectures-text-column {
+  grid-column: 1;
+  height: 100vh;
+  padding: 12vh 4rem 12vh 6rem;
+  position: relative;
+  overflow: hidden; /* Hide scrollbars, scrolled via JS transform */
+  border-right: 1px solid var(--border-color);
+  background: linear-gradient(to right, rgba(8, 9, 11, 0.98) 80%, rgba(16, 20, 24, 0.95) 100%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+}
+
+.lectures-text-scrollable {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  will-change: transform;
+}
+
+.lecture-titles-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.lecture-titles-list li {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-style: italic;
+  color: var(--accent-gold);
+  border: 1px dashed rgba(212, 175, 55, 0.2);
+  padding: 0.75rem 1.25rem;
+  border-radius: 4px;
+  background: rgba(212, 175, 55, 0.02);
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.05);
+}
+
+.lecture-quote {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-style: italic;
+  color: var(--accent-gold-muted);
+  line-height: 1.6;
+  margin: 1.5rem 0 0 0;
+  border-left: 3px solid var(--accent-terracotta);
+  padding-left: 2rem;
+  text-align: left;
+  position: relative;
+}
+
+.lecture-quote .quote-author {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+/* Right Column: Horizontal Slide Gallery Viewport */
+.lectures-gallery-column {
+  grid-column: 2;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  z-index: 5;
+  background: radial-gradient(circle at center, rgba(16, 12, 10, 0.2) 0%, rgba(8, 9, 11, 0.6) 100%);
+}
+
+.theosophical-harmony-panel {
+  background: linear-gradient(135deg, #19141f 0%, #0e0a12 100%);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 6px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.5),
+    inset 0 0 15px rgba(0, 0, 0, 0.8);
+}
+
+.theosophical-harmony-panel .panel-header {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent-gold);
+  text-align: center;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+  padding-bottom: 0.5rem;
+}
+
+.harmony-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+}
+
+.harmony-table th {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: var(--text-white);
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.25);
+  text-align: left;
+  font-weight: 600;
+}
+
+.harmony-table th:last-child {
+  text-align: right;
+  border-left: 1px solid rgba(212, 175, 55, 0.12);
+}
+
+.harmony-table td {
+  padding: 0.9rem 1rem;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.harmony-table td:last-child {
+  text-align: right;
+  border-left: 1px solid rgba(212, 175, 55, 0.12);
+}
+
+.harmony-table tbody tr:hover td {
+  color: var(--text-white);
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.harmony-table td.gold-accent-cell {
+  color: var(--accent-gold-muted);
+  font-weight: 500;
+}
+
+.harmony-table td.terracotta-accent-cell {
+  color: var(--accent-terracotta);
+  font-weight: 500;
+}
+
+/* ========================================================================
+   Act V: The Wild Paradise Styles
+   ======================================================================== */
+.act-paradise {
+  background: linear-gradient(to bottom, rgba(8, 9, 11, 0.95) 0%, rgba(12, 18, 14, 0.92) 30%, rgba(12, 18, 14, 0.95) 70%, #08090b 100%), url('imageAssets/gardenScene.webp') no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed;
+  padding: 15vh 0 10vh 0;
+}
+
+.act-outro-block {
+  max-width: 1100px;
+  margin: 0 auto 12vh auto;
+  padding: 0 2rem;
+}
+
+.garden-split-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 4rem;
+  align-items: center;
+  margin-bottom: 6vh;
+  text-align: left;
+}
+
+.garden-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.garden-text p {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  line-height: 1.75;
+  margin: 0;
+}
+
+.garden-quote {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-style: italic;
+  color: var(--accent-gold);
+  line-height: 1.6;
+  margin: 1.5rem 0 0 0;
+  border-left: 3px solid var(--accent-terracotta);
+  padding-left: 2rem;
+  position: relative;
+}
+
+.garden-quote .quote-author {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+.garden-visual {
+  display: flex;
+  justify-content: center;
+}
+
+.concluding-paragraph {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  line-height: 1.7;
+  color: var(--text-white);
+  text-align: center;
+  max-width: 900px;
+  margin: 4rem auto 0 auto;
+  border-top: 1px dashed rgba(212, 175, 55, 0.15);
+  padding-top: 3rem;
+  position: relative;
+}
+
+
+/* ========================================================================
+   Persistent Floating Magic Lantern Lens Widget
+   ======================================================================== */
+.floating-lantern-lens {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  width: 90px;
+  height: 90px;
+  z-index: 1000;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+}
+
+.floating-lantern-lens:hover {
+  transform: scale(1.08);
+}
+
+.progress-ring-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotate(-90deg); /* Start at the top */
+}
+
+.progress-ring-bg {
+  fill: rgba(6, 7, 9, 0.8);
+  stroke: rgba(255, 255, 255, 0.05);
+  stroke-width: 4;
+}
+
+.progress-ring-fill {
+  fill: none;
+  stroke: var(--accent-gold);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 238.76; /* Circumference for r=38 */
+  stroke-dashoffset: 238.76; /* Starts empty */
+  transition: stroke-dashoffset 0.1s ease-out;
+  filter: drop-shadow(0 0 4px var(--accent-gold-glow));
+}
+
+.lens-inner-glass {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, #2c2720 0%, #0d0c0a 100%);
+  border: 2px solid var(--accent-gold-muted);
+  overflow: hidden;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+.lens-glowing-aperture {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, #ffd54f 0%, #c79b3f 60%, rgba(0, 0, 0, 0) 100%);
+  opacity: 0.8;
+  box-shadow: 0 0 15px rgba(255, 213, 79, 0.6);
+  animation: lensLampFlicker 4s infinite alternate;
+}
+
+@keyframes lensLampFlicker {
+  0%, 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(0.95); }
+  23% { opacity: 0.85; }
+  45% { opacity: 0.65; transform: translate(-50%, -50%) scale(0.9); }
+  70% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.05); }
+  88% { opacity: 0.75; }
+}
+
+/* ========================================================================
+   Archive Catalog Section Styles (Same background as Act IV)
+   ======================================================================== */
+.archive-section {
+  position: relative;
+  padding: 15vh 0 10vh 0;
+  width: 100vw;
+  background-color: var(--bg-primary); /* Default off-black background (same as Act IV) */
+  border-top: 1px solid var(--border-color);
+  z-index: 2;
+}
+
+.archive-index-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.archive-index-header h2 {
+  font-family: var(--font-serif);
+  font-size: 2.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.archive-index-header p {
+  font-family: var(--font-sans);
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* Interactive Grid Catalog */
+.archive-grid {
+  /*
+    References:
+    - MDN grid-template-columns (auto-fill & minmax): https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns
+    - W3Schools CSS Grid Container: https://www.w3schools.com/css/css_grid_container.asp
+  */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 8rem;
+}
+
+.archive-grid-item {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.archive-grid-item:hover {
+  border-color: rgba(212, 175, 55, 0.3);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(212, 175, 55, 0.05);
+}
+
+.grid-item-thumbnail {
+  width: 100%;
+  height: 100px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #000;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  margin-bottom: 0;
+}
+
+.grid-item-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: sepia(0.1) contrast(1.02);
+  transition: transform 0.5s ease;
+}
+
+.archive-grid-item:hover .grid-item-thumbnail img {
+  transform: scale(1.05);
+}
+
+/* Attributions footer block */
+.attribution-block {
+  text-align: center;
+  padding-top: 3rem;
+}
+
+.attribution-line {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border-color) 20%, var(--border-color) 80%, transparent);
+  margin-bottom: 2rem;
+}
+
+.attribution-text {
+  font-size: 0.8rem;
+  color: var(--text-dark);
+  line-height: 1.6;
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+/* ========================================================================
+   Glass Slide Lightbox Modal System
+   ======================================================================== */
+.slide-lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(6, 7, 9, 0.96);
+  backdrop-filter: blur(15px);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease-out;
+}
+
+.slide-lightbox.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 2rem;
+  right: 3rem;
+  background: transparent;
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold);
+  padding: 0.5rem 1.25rem;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 1010;
+  transition: var(--transition-fast);
+}
+
+.lightbox-close:hover {
+  background: var(--accent-gold);
+  color: var(--bg-primary);
+  box-shadow: 0 0 10px var(--accent-gold-glow);
+}
+
+.lightbox-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  max-width: 90%;
+  transform: scale(0.9);
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.slide-lightbox.open .lightbox-content {
+  transform: scale(1);
+}
+
+.lightbox-wood-frame {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  width: 480px;
+  height: 480px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Lightbox specific responsive scaling */
+@media (max-height: 800px) {
+  .lightbox-wood-frame {
+    width: 360px;
+    height: 360px;
+    padding: 0;
+  }
+}
+
+.lightbox-glass-aperture {
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  border-radius: 8px; /* Restore rectangular zoom view */
+  border: 3px solid #1a0f0d;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    inset 0 0 25px rgba(0, 0, 0, 0.95),
+    0 0 20px rgba(0, 0, 0, 0.6);
+}
+
+.lightbox-glass-aperture img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: sepia(0.08) contrast(1.03);
+}
+
+.lightbox-metadata {
+  text-align: center;
+  max-width: 650px;
+}
+
+.lightbox-metadata h2 {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  color: var(--text-white);
+  margin-bottom: 0.5rem;
+}
+
+.lightbox-metadata p {
+  font-family: var(--font-sans);
+  color: var(--text-muted);
+  font-size: 1rem;
+}

@@ -1,17 +1,515 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Story of C.L. Wragge</title>
-
-<!-- Base reset and customised stylesheet links -->
-    <link rel="stylesheet" href="reset.css" />
-    <link rel="stylesheet" href="style.css" />
-<!-- Defer ensures execution after DOM parsing -->
-    <script src="script.js" defer></script>
+  <!-- 
+    References:
+    - MDN HTML <head> Element: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/head
+    - W3Schools HTML Head: https://www.w3schools.com/html/html_head.asp
+    - MDN Metadata in HTML: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
+    - W3Schools HTML Meta Tag: https://www.w3schools.com/tags/tag_meta.asp
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Inclement Wragge: A Magic Lantern Archive</title>
+  <meta name="description" content="An interactive biographical archive of Clement Lindley Wragge, utilizing his vintage Magic Lantern slide collection to tell the story of his weather forecasting and cosmic lectures.">
+  <link rel="stylesheet" href="reset.css">
+  <link rel="stylesheet" href="style.css">
 </head>
+<!-- 
+  ========================================================================
+  DESIGN INTENT & CONTEXTUAL COMMENTARY
+  ========================================================================
+  
+  CONTEXTUAL INSPIRATION & ACTION SELECTION:
+  This prototype uses the vertical "Scroll" action to drive a sequential,
+  immersive biography of Clement Lindley Wragge (1852-1922) and display
+  his historic hand-colored "Lantern Slides" from the Public Domain Review.
+  The Magic Lantern slide projector was the 19th-century precursor to modern
+  cinema and digital slideshows. Projections occurred in darkened rooms, 
+  sequentially fading from one slide to the next using mechanical levers 
+  and light shutters. By mapping the user's vertical scroll to slide cross-fades
+  and horizontal translations, the interaction mirrors the mechanical pace 
+  and physical feel of advancing slides in a vintage projector.
+  
+  STYLE & AESTHETIC CHOICES:
+  1. Color Palette: The dark, high-contrast palette (#0b0c0e background) mimics
+     the atmospheric darkness of a Victorian lecture hall. The slide borders 
+     are styled like physical wooden slide mounts, and the images themselves 
+     glow, evoking the bright projection lamp cutting through dust.
+  2. Typography: Classic, high-contrast serif typeface headers (system Georgia/Garamond)
+     pay homage to 19th-century scientific publications. Clean, spaced sans-serif 
+     copy is used for the body to maintain excellent legibility on screens.
+  3. Visual Feedback: Hover effects on cards recreate lens refraction glare,
+     enforcing a tactile feel. A custom "brass scrollbar" suggests a dial on the 
+     projector itself.
+     
+  CHALLENGES & FUTURE PROJECTIONS:
+  - Scroll Synchronization: A main hurdle in vanilla scrollytelling is layout 
+    thrashing when calculating positioning. We solve this by limiting DOM writes 
+    to CSS properties (transforms, opacities) interpolated via requestAnimationFrame.
+  - Future Scale: Integrating this prototype into a larger educational archive 
+    could benefit from progressive loading/lazy-loading of the slide assets 
+    (with 300+ slides available) and utilizing CSS view-transitions to morph 
+    slides smoothly between detail pages.
+  ========================================================================
+-->
 <body>
+
+  <!-- Floating Magic Lantern Progress Indicator & Scroll-to-Top Lens -->
+  <div class="floating-lantern-lens" id="scroll-progress-lens" role="button" aria-label="Scroll to Top / Progress Indicator">
+    <svg class="progress-ring-svg" width="90" height="90">
+      <circle class="progress-ring-bg" cx="45" cy="45" r="38" />
+      <circle class="progress-ring-fill" id="progress-ring-fill" cx="45" cy="45" r="38" />
+    </svg>
+    <div class="lens-inner-glass">
+      <div class="lens-glowing-aperture"></div>
+      <div class="glass-glare"></div>
+    </div>
+  </div>
+
+  <!-- Background Ambient Projector Beam Overlay -->
+  <div class="projector-ambient-light" id="projector-beam"></div>
+
+  <!-- Hero Section: Setting the Atmosphere (Scroll Y: 0px - 1000px) -->
+  <header class="hero-section">
+    <div class="hero-container">
+      <!-- Title Header on the Left -->
+      <div class="hero-title-wrapper" id="hero-text">
+        <h1 class="hero-title-clean">THE WEATHER<br><span class="accent-title">PROPHET</span></h1>
+        <p class="hero-kicker-clean">The Sublime Universe of Clement Wragge</p>
+      </div>
+
+      <!-- Magic Lantern Graphic on the Right -->
+      <div class="hero-lantern-wrapper" id="hero-lantern-container">
+        <img src="imageAssets/magiclantern.svg" alt="Magic Lantern Projector" class="magic-lantern-graphic">
+        <!-- The Projected Light Cone element originating from the lens -->
+        <div class="projector-light-cone-wrapper" id="hero-light-cone">
+          <div class="projector-light-cone"></div>
+        </div>
+      </div>
+
+      <!-- Scroll Indicator at bottom -->
+      <div class="scroll-indicator" id="hero-scroll-indicator">
+        <span class="scroll-arrow">↓</span>
+        <span class="scroll-text">Scroll to ignite the projector</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Narrative Act I: The Crucible of the Mountain -->
+  <section id="act1" class="narrative-act act-mountain">
+    <div class="act-container">
+      <div class="act-grid-split">
+        <div class="act-text-column">
+          <span class="act-label">Act I</span>
+          <h2 class="act-title">The Crucible of the Mountain</h2>
+          <p>
+            Clement Lindley Wragge was a man built like the very atmospheric systems he sought to understand: tall, thin, possessing an iron constitution, a mop of flaming red hair, and an explosive temper to match. Orphaned in infancy and raised by a grandmother who gently tuned his early sight to the basics of cosmology, he spent his youth fleeing the mundane confines of an unfinished law degree to chase the edges of the earth.
+          </p>
+          <p>
+            By the early 1880s, his wanderlust crystallised into a gruelling, daily courtship with the sublime.
+          </p>
+          <p>
+            Volunteering for the Scottish Meteorological Society when funding collapsed, Wragge became the solitary anchor of the Ben Nevis Observatory. Every single day, through the blinding fury of Atlantic gales, torrential rain, and choking snowdrifts, he made a frantic 22.5 kilometre ascent on foot up the rugged, trackless rock of the mountain. He operated on a strict, seconds-accurate schedule, braving two-hour exposures at the summit without shelter.
+          </p>
+          <p>
+            His hands routinely grew so numbed and swollen, and his logbooks so saturated with moisture, that he could barely handle his instruments.
+          </p>
+          
+          <!-- Ascent of the Sublime Panel -->
+          <div class="scientific-chart-panel">
+            <div class="chart-header">The Ascent of the Sublime</div>
+            <div class="chart-grid">
+              <div class="chart-col">
+                <div class="chart-label">The Void</div>
+                <div class="chart-sub">(Ben Nevis Summit)</div>
+                <div class="chart-desc">4,405 feet of cold, shrouding cloud-fog and violent gales</div>
+              </div>
+              <div class="chart-vector">
+                <span class="vector-arrow">⟵<br>⟶</span>
+              </div>
+              <div class="chart-col">
+                <div class="chart-label">The Agent</div>
+                <div class="chart-sub">(Wragge's Iron Will)</div>
+                <div class="chart-desc">Seconds-accurate, drenched in sweat, defying the tempest</div>
+              </div>
+            </div>
+          </div>
+
+          <p>
+            Yet, this was not merely scientific devotion; it was an initiation into the terrifyingly beautiful forces of a living universe. It was here, suspended in the shrouding cloud-fog, that he earned his moniker: <strong>The Weather Prophet</strong>.
+          </p>
+        </div>
+        <div class="act-visual-column">
+          <div class="visual-card">
+            <img src="updatedWebsiteNarrative.webp" alt="Wragge on Ben Nevis Summit">
+            <span class="visual-caption">Wragge recording meteorological data amidst the rocky void of Ben Nevis summit.</span>
+          </div>
+          <div class="visual-card sub-card">
+            <img src="imageAssets/magicLanterns/ben-nevis-observatory-o30-1033358_54960621390_o.webp" alt="Ben Nevis Observatory in winter">
+            <span class="visual-caption">Archival slide: Ben Nevis Observatory winter station under heavy snow.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Narrative Act II: The Language of the Tempest -->
+  <section id="act2" class="narrative-act act-tempest">
+    <!-- Floating spin cyclone graphic -->
+    <img src="imageAssets/cyclone.svg" alt="" class="floating-cyclone-vector" id="floating-cyclone">
     
+    <div class="act-container">
+      <div class="act-grid-split reversed">
+        <div class="act-text-column">
+          <span class="act-label">Act II</span>
+          <h2 class="act-title">The Language of the Tempest</h2>
+          <p>
+            When Wragge brought his talents to the southern hemisphere, establishing the Meteorological Society of Australasia, his dialogue with the weather took a deeply theatrical turn. He became the first person to systematically name the chaotic forces of the atmosphere, treating the winds not as cold data points, but as distinct personalities.
+          </p>
+          <p>
+            His nomenclature evolved like a sprawling, mythological epic:
+          </p>
+          <ul class="theatrical-list">
+            <li>
+              <strong class="gold-text">The Divine & The Beautiful:</strong>
+              <span>He pulled first from the Greek alphabet and classical mythology. Later, captivated by his travels, he chose feminine names, particularly of the South Sea Islanders he encountered.</span>
+            </li>
+            <li>
+              <strong class="terracotta-text">The Truculent & The Petty:</strong>
+              <span>For the cold, violent polar front depressions that battered the coast, he reserved the names of politicians who refused to fund his meteorological work.</span>
+            </li>
+          </ul>
+          <p>
+            The public eagerly joined the performance. Newspapers analysed his literary tactics, and local farmers wrote letters begging Wragge to retire the "windy" politicians in favour of "watery" names to break devastating droughts. Through his weekly scientific gazette, Wragge transformed the sky into a morality play, weaponising the weather to mirror human hubris.
+          </p>
+        </div>
+        <div class="act-visual-column">
+          <div class="visual-card">
+            <img src="imageAssets/weatherMap.webp" alt="Stylized Weather Map">
+            <span class="visual-caption">Historical isobar map illustrating monsoonal swirls and high-pressure systems.</span>
+          </div>
+          <div class="visual-card sub-card">
+            <img src="imageAssets/CLWragge_with_Group_StateLibQld_2_65859_Battery_of_Stiger_Vortex_rain-making_guns_at_Charleville,_1902.jpg" alt="Stiger Vortex Guns at Charleville">
+            <span class="visual-caption">Wragge (center-right) deploying the conical Stiger Vortex rainmaking guns at Charleville, 1902.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Narrative Act III: The Lantern Lectures and the Inner Climate -->
+  <section id="act3" class="act-lectures">
+    <div class="lectures-sticky-container">
+      <div class="lecture-hall-bg"></div>
+      
+      <!-- Left Column: Scrolling Text Narrative -->
+      <div class="lectures-text-column" id="lectures-text-container">
+        <div class="lectures-text-scrollable" id="lectures-text-scrollable">
+          <span class="act-label">Act III</span>
+          <h2 class="act-title">The Lantern Lectures & the Inner Climate</h2>
+          <p>
+            By the turn of the century, Wragge’s gaze shifted definitively inward. He became deeply attuned to the mystical current of the inner world, aligning his life with <strong>Theosophy</strong> and the study of the occult. For Wragge, there was no division between the telescope and the soul; science and spirituality were fundamentally connected to the same underlying divinity.
+          </p>
+          <p>
+            Armed with boxes of over 350 hand-painted magic lantern slides, Wragge embarked on legendary, grand international lecture tours. He titled his presentations with sweeping, romantic gravity:
+          </p>
+          <ul class="lecture-titles-list">
+            <li>“A Voyage through the Universe”</li>
+            <li>“The Majesty of Creation”</li>
+            <li>“The Endless Universe and Eternal Life”</li>
+          </ul>
+          <p>
+            On stage, his speaking style embodied the very weather he used to forecast. Observers described his voice coming "in gusts, dying away in murmurs, occasionally traveling with the speed of a small tornado." He weaponized astronomy as a universal religion designed to lift human minds completely beyond the finite. He intentionally forced his audiences to confront how beautifully insignificant they were in the grand scale of the cosmos—yet, this insignificance was meant to deeply comfort them.
+          </p>
+          <blockquote class="lecture-quote">
+            "Instead of going to church, I prefer to go out into the mighty universe and ask God for wisdom. Can we not pray in the open, in the forests, and by the rivers?"
+            <span class="quote-author">— Clement Wragge, 1908</span>
+          </blockquote>
+        </div>
+      </div>
+
+      <!-- Right Column: Slide Gallery Carousel -->
+      <div class="lectures-gallery-column">
+        <!-- Interactive Instructions Overlay -->
+        <div class="gallery-header">
+          <span class="gallery-label">Projecting Archive: The Grandeur of the Universe</span>
+          <div class="carousel-navigation-hint">Scroll down to slide the carriage horizontally</div>
+        </div>
+
+        <!-- Horizontal Carriage Track -->
+        <div class="slide-track-wrapper">
+          <div class="slide-track" id="slide-track">
+            
+            <!-- Slide 1 -->
+            <div class="lantern-slide-card" data-slide-index="0" data-title="A Cosmos of Truth" data-meta="PDR Slide #1033304 | Inscription: 'Great ruler of an immortal cosmos, give me truth.'">
+              <div class="slide-wood-frame">
+                <div class="slide-glass-aperture">
+                  <img src="imageAssets/magicLanterns/great-ruler-of-an-immortal-cosmos-give-me-truth-1033304_54960616290_o.webp" alt="Great ruler of an immortal cosmos, give me truth.">
+                  <div class="glass-glare"></div>
+                </div>
+              </div>
+              <div class="slide-label">I. Cosmic Invocation</div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="lantern-slide-card" data-slide-index="1" data-title="Saturn from Satellite" data-meta="PDR Slide #1033200 | Inscription: 'Saturn from satellite local.' Hand-painted celestial perspective.">
+              <div class="slide-wood-frame">
+                <div class="slide-glass-aperture">
+                  <img src="imageAssets/magicLanterns/saturn-from-satellite-1033200_54960306316_o.webp" alt="Saturn from satellite local">
+                  <div class="glass-glare"></div>
+                </div>
+              </div>
+              <div class="slide-label">II. Planetary Vistas</div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="lantern-slide-card" data-slide-index="2" data-title="Archimedes & Lunar Apennines" data-meta="PDR Slide #1033421 | Detail of the lunar surface craters and mountain ridges.">
+              <div class="slide-wood-frame">
+                <div class="slide-glass-aperture">
+                  <img src="imageAssets/magicLanterns/archimedes-apennines-1033421_54959434557_o.webp" alt="Archimedes lunar Apennines">
+                  <div class="glass-glare"></div>
+                </div>
+              </div>
+              <div class="slide-label">III. Lunar Topography</div>
+            </div>
+
+            <!-- Slide 4 -->
+            <div class="lantern-slide-card" data-slide-index="3" data-title="Dust Shoals & Solar Storms" data-meta="PDR Slide #1033190 | Inscription: 'Dust shoals from the sun bombarding the earth.'">
+              <div class="slide-wood-frame">
+                <div class="slide-glass-aperture">
+                  <img src="imageAssets/magicLanterns/dust-shoals-from-the-sun-bombarding-the-earth-u68a-1033190_54960606035_o.webp" alt="Dust shoals bombarding the earth">
+                  <div class="glass-glare"></div>
+                </div>
+              </div>
+              <div class="slide-label">IV. Solar Bombardment</div>
+            </div>
+
+            <!-- Slide 5 -->
+            <div class="lantern-slide-card" data-slide-index="4" data-title="Monsoonal Lightning, Queensland" data-meta="PDR Slide #1033329 | Rare photograph capturing storm electricity in Queensland, Australia.">
+              <div class="slide-wood-frame">
+                <div class="slide-glass-aperture">
+                  <img src="imageAssets/magicLanterns/monsoonal-ligtening-queensland-o112-1033329_54960564689_o.webp" alt="Monsoonal lightning Queensland">
+                  <div class="glass-glare"></div>
+                </div>
+              </div>
+              <div class="slide-label">V. Atmospheric Electricity</div>
+            </div>
+
+            <!-- Slide 6 -->
+            <div class="lantern-slide-card" data-slide-index="5" data-title="Total Solar Eclipse" data-meta="PDR Slide #1033185 | Corona of the Sun during a total solar eclipse, late 19th century.">
+              <div class="slide-wood-frame">
+                <div class="slide-glass-aperture">
+                  <img src="imageAssets/magicLanterns/total-eclipse-u73-1033185_54960478578_o.webp" alt="Total Solar Eclipse">
+                  <div class="glass-glare"></div>
+                </div>
+              </div>
+              <div class="slide-label">VI. The Solar Corona</div>
+            </div>
+
+            <!-- Slide 7 -->
+            <div class="lantern-slide-card" data-slide-index="6" data-title="Radium's Autograph" data-meta="PDR Slide #1033327 | Inscription: 'How radium writes its autograph.' Illustrating radiant particles.">
+              <div class="slide-wood-frame">
+                <div class="slide-glass-aperture">
+                  <img src="imageAssets/magicLanterns/how-radium-writes-its-autograph-c35a-1033327_54960564544_o.webp" alt="How radium writes its autograph">
+                  <div class="glass-glare"></div>
+                </div>
+              </div>
+              <div class="slide-label">VII. Radiant Energy</div>
+            </div>
+
+            <!-- Slide 8 -->
+            <div class="lantern-slide-card" data-slide-index="7" data-title="Wragge at Waiata Gardens" data-meta="PDR Slide #1033446 | Clement Lindley Wragge standing in his tropical garden haven in Auckland.">
+              <div class="slide-wood-frame">
+                <div class="slide-glass-aperture">
+                  <img src="imageAssets/magicLanterns/clement-l-wragge-at-waiata-tropical-gardens-1033446_54960627720_o.webp" alt="Wragge at Waiata">
+                  <div class="glass-glare"></div>
+                </div>
+              </div>
+              <div class="slide-label">VIII. Botanical Retreat</div>
+            </div>
+
+            <!-- Slide 9 -->
+            <div class="lantern-slide-card" data-slide-index="8" data-title="The Endless Universe & Eternal Life" data-meta="PDR Slide #1033287 | Magic lantern lecture title slide demonstrating theosophical concepts.">
+              <div class="slide-wood-frame">
+                <div class="slide-glass-aperture">
+                  <img src="imageAssets/magicLanterns/the-endless-universe-and-eternal-life-u1-1033287_54960615025_o.webp" alt="Endless Universe and Eternal Life">
+                  <div class="glass-glare"></div>
+                </div>
+              </div>
+              <div class="slide-label">IX. Cosmic Philosophy</div>
+            </div>
+
+            <!-- Slide 10 -->
+            <div class="lantern-slide-card" data-slide-index="9" data-title="No Religion Higher Than Truth" data-meta="PDR Slide #1033381 | Inscription expressing the fundamental motto of theosophy.">
+              <div class="slide-wood-frame">
+                <div class="slide-glass-aperture">
+                  <img src="imageAssets/magicLanterns/there-is-no-religion-higher-than-truth-1033381_54960569169_o.webp" alt="No Religion Higher Than Truth">
+                  <div class="glass-glare"></div>
+                </div>
+              </div>
+              <div class="slide-label">X. The Final Motto</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Sticky Carousel Caption Board -->
+        <div class="gallery-footer-board">
+          <div class="active-slide-indicator">
+            Slide <span id="current-slide-num">1</span> of 10
+          </div>
+          <div class="caption-content">
+            <h3 class="caption-title" id="caption-title">A Cosmos of Truth</h3>
+            <p class="caption-metadata" id="caption-meta">PDR Slide #1033304 | Inscription: 'Great ruler of an immortal cosmos, give me truth.'</p>
+          </div>
+          <div class="projector-controls">
+            <span class="control-indicator glow" id="projector-indicator">● Projector Engaged</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Narrative Act IV: The Confluence of Science and Soul -->
+  <section id="act4" class="narrative-act act-soul">
+    <div class="act-container">
+      <div class="act-grid-split">
+        <div class="act-text-column">
+          <span class="act-label">Act IV</span>
+          <h2 class="act-title">The Confluence of Science & Soul</h2>
+          <p>
+            In 1908, while touring India, Wragge’s cosmic philosophy found its ultimate mirror. In Lahore, following a lantern slideshow on the vastness of creation, he met Mirza Ghulam Ahmad, the founder of the Ahmadiyya movement. The meteorologist and the mystic spent hours in deep conversation, finding perfect harmony between the laws of nature and the realms of religion.
+          </p>
+          <p>
+            Wragge’s slides from this later era reveal his true obsession: capturing the unseen threads of the universe. He became fascinated with radium, projecting its glowing image to audiences not as a mere chemical element, but as the physical manifestation of the "radio-active spark of God." His lectures openly discarded meteorological textbooks to focus instead on themes of poetic eternity: the persistence of conscious life after death and the absolute survival of the human soul.
+          </p>
+
+          <!-- Theosophical Harmony Panel -->
+          <div class="theosophical-harmony-panel">
+            <div class="panel-header">Theosophical Harmony</div>
+            <table class="harmony-table">
+              <thead>
+                <tr>
+                  <th>Physical Cosmos</th>
+                  <th>Divine Mysticism</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="gold-accent-cell">Radium Radiation</td>
+                  <td class="gold-accent-cell">The Spark of God</td>
+                </tr>
+                <tr>
+                  <td>Atmospheric Swirl</td>
+                  <td>Spiritual Energy</td>
+                </tr>
+                <tr>
+                  <td class="terracotta-accent-cell">Universal Scale</td>
+                  <td class="terracotta-accent-cell">Survival of the Soul</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <div class="act-visual-column">
+          <div class="visual-card">
+            <img src="imageAssets/magicLanterns/how-radium-writes-its-autograph-c35a-1033327_54960564544_o.webp" alt="Radium Autograph Slide">
+            <span class="visual-caption">Slide #1033327 showing radium radiation patterns, interpreted by Wragge as divine energy.</span>
+          </div>
+          <div class="visual-card sub-card">
+            <img src="imageAssets/magicLanterns/kismet-and-shoemaker-darjeeling-1033443_54960627740_o.webp" alt="Kismet and Shoemaker at Darjeeling" onerror="this.src='imageAssets/magicLanterns/kismet-and-shoemaker-darjeeling-1033444_54959436547_o.webp'">
+            <span class="visual-caption">Indian landscape capture during Wragge's historic 1908 lecture tour.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Narrative Act V: The Wild Paradise -->
+  <section id="act5" class="narrative-act act-paradise">
+    <div class="act-container">
+      
+      <div class="act-outro-block">
+        <span class="act-label">Act V</span>
+        <h2 class="act-title">The Wild Paradise</h2>
+        
+        <div class="garden-split-layout">
+          <div class="garden-text">
+            <p>
+              Passionate, eccentric, and eventually estranged from his early life, Wragge spent his final years in New Zealand, transforming a bare, hungry, rocky ridge in Auckland into a sprawling, wild tropical jungle paradise. He proved that by understanding local climate, a man could force a desert to smile, surrounding himself with exotic palms, archaeological relics, and rare flora.
+            </p>
+            <p>
+              When Sir Arthur Conan Doyle visited the aging polymath in the early 1920s, he left completely spellbound, writing that Wragge was indisputably the most remarkable personality in Auckland:
+            </p>
+            <blockquote class="garden-quote">
+              "...dreamer, mystic, and yet very practical adviser on all matters of ocean and air."
+              <span class="quote-author">— Sir Arthur Conan Doyle, ca. 1920s</span>
+            </blockquote>
+          </div>
+          
+          <div class="garden-visual">
+            <div class="visual-card">
+              <img src="imageAssets/gardenScene.webp" alt="Waiata Gardens Auckland">
+              <span class="visual-caption">Lush canopy and palms at Waiata, Wragge's tropical sanctuary in Birkenhead, Auckland.</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="concluding-paragraph">
+          Clement Wragge passed away in 1922, leaving his vast collections of nature, geology, and ethnography behind. He remains worth remembering not because he recorded the rain or mapped the barometric pressure, but because he stood unprotected in the storms of the earth and looked through them to see the infinite grandeur of the soul.
+        </p>
+    </div>
+  </section>
+
+  <!-- Archive Catalog Section -->
+  <section id="archive-catalog" class="archive-section">
+    <div class="act-container">
+      <!-- Interactive Slideshow Grid Index (For manual click-to-zoom) -->
+      <div class="archive-index-header">
+        <h2>Archive Catalog</h2>
+        <p>Select a slide to inspect the glass plate detail and metadata</p>
+      </div>
+
+      <div class="archive-grid"></div>
+
+      <div class="attribution-block">
+        <hr class="attribution-line">
+        <p class="attribution-text">
+          Prototype design and code by Curtis Cox (s4022757) for A3 Interactive Media. Artworks and slide captures retrieved from <em>The Public Domain Review</em>, showcasing the collection "A Prophet of the Weather: Lantern Slides by Clement Lindley Wragge (ca. 1900-22)." All slide resources are licensed under the Public Domain or Creative Commons CC0. No third-party layout engines, frameworks, or dependencies were used.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 
+    Interactive Glass Slide Overlay (Lightbox Modal)
+    References:
+    - MDN ARIA Dialog Role: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/dialog_role
+    - W3Schools HTML5 Semantic Elements: https://www.w3schools.com/html/html5_semantic_elements.asp
+  -->
+  <div class="slide-lightbox" id="lightbox" role="dialog" aria-hidden="true" aria-label="Lantern Slide Lightbox View">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close Lightbox">✕ Close Projector</button>
+    <div class="lightbox-content">
+      <div class="lightbox-wood-frame">
+        <div class="lightbox-glass-aperture">
+          <img src="" alt="" id="lightbox-img">
+          <div class="glass-glare"></div>
+        </div>
+      </div>
+      <div class="lightbox-metadata">
+        <h2 id="lightbox-title">Slide Title</h2>
+        <p id="lightbox-desc">Slide metadata will appear here.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 
+    References:
+    - MDN HTML <script> Element (defer attribute): https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script
+    - W3Schools HTML script defer Attribute: https://www.w3schools.com/tags/att_script_defer.asp
+  -->
+  <script src="script.js" defer></script>
 </body>
 </html>
